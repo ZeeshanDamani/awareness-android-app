@@ -22,7 +22,7 @@ class LoginActivity : BaseActivity() {
             goToSignUpActivity()
 
         }
-        bindingView.loginBtn.setOnClickListener{
+        bindingView.loginBtn.setOnClickListener {
             performAuth()
         }
     }
@@ -32,24 +32,23 @@ class LoginActivity : BaseActivity() {
         startActivity(intent)
     }
 
-
-
-    fun performAuth(){
+    private fun performAuth() {
         val userPhone = bindingView.userPhone.text.toString();
         val userPassword = bindingView.password.text.toString();
 
-        if(isAuthenticate(userPhone , userPassword)){
+        if (isAuthenticate(userPhone, userPassword)) {
             goToDashboardActivity();
         } else {
             bindingView.invalidAuthText.text = "Invalid Login Credentials"
-            bindingView.invalidAuthText.visibility =  View.VISIBLE
+            bindingView.invalidAuthText.visibility = View.VISIBLE
         }
     }
 
 
-    fun isAuthenticate(phoneNumber:String, password:String) : Boolean {
-        return (phoneNumber.equals(AppSharedPreferences.getConfig("userPhone"))
-                && password.equals(AppSharedPreferences.getConfig("userPassword")))
+    private fun isAuthenticate(phoneNumber: String, password: String): Boolean {
+        val user = AppSharedPreferences.getUser()
+        return phoneNumber == user.phoneNumber
+                && password == user.password
     }
 
     private fun goToDashboardActivity() {
