@@ -9,13 +9,24 @@
         android:layout_margin="16dp"
         tools:context=".LoginActivity">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/invalid_auth_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="" android:textColor="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
+            />
+
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/username"
+            android:id="@+id/userPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:hint="Phone number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/invalid_auth_text" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/password"
@@ -24,13 +35,13 @@
             android:layout_marginTop="16dp"
             android:hint="Password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username" />
+            app:layout_constraintTop_toBottomOf="@+id/userPhone" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
