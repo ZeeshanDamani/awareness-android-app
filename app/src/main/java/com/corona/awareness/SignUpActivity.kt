@@ -16,6 +16,7 @@ class SignUpActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_signup)
+        setTitle("Signup")
         setupUI()
     }
 
