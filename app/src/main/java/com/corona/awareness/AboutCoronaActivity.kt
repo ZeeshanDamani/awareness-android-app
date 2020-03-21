@@ -12,6 +12,7 @@ class AboutCoronaActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTitle("About Corona Viruse")
         bindingView = setContentViewDataBinding(R.layout.activity_about_corona)
         bindingView.aboutWebView.loadUrl("https://www.who.int/health-topics/coronavirus")
     }

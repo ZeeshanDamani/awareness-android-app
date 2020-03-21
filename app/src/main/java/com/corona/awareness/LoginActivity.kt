@@ -13,6 +13,7 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_login)
         AppSharedPreferences.init(this)
+        setTitle("Login")
         setupUI()
     }
 

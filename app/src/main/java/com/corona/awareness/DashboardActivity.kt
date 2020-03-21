@@ -32,7 +32,7 @@ class DashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_dashboard)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
+        setTitle("Dashboard")
         setupUI()
     }
 
@@ -50,8 +50,11 @@ class DashboardActivity : BaseActivity() {
         }
 
         bindingView.notFeelWell.setOnClickListener {
-
             getLastLocation()
+        }
+
+        bindingView.nearestCenters.setOnClickListener {
+            goToNearestCenterActivity()
         }
     }
 
@@ -65,7 +68,10 @@ class DashboardActivity : BaseActivity() {
         startActivity(intent)
     }
 
-
+    fun goToNearestCenterActivity() {
+        val intent = Intent(this, NearestCenterActivity::class.java)
+        startActivity(intent)
+    }
 
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {

@@ -12,6 +12,7 @@ class WhoGuidelinesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_who_guidelines)
+        setTitle("World Health Organisation Guide")
         bindingView.whoGuidelinesWebView.loadUrl("https://www.who.int/health-topics/coronavirus")
     }
 }
