@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import com.corona.awareness.SignUpActivity.ValidationResult.*
 import com.corona.awareness.databinding.ActivitySignupBinding
+import com.corona.awareness.model.SignUpData
 import java.util.*
 
 
