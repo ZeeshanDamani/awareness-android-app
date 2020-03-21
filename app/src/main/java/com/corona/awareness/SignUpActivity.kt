@@ -3,14 +3,16 @@ package com.corona.awareness
 import android.app.DatePickerDialog
 import android.os.Bundle
 import com.corona.awareness.SignUpActivity.ValidationResult.*
+import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivitySignupBinding
-import com.corona.awareness.model.SignUpData
+import com.corona.awareness.model.User
 import java.util.*
 
 
 class SignUpActivity : BaseActivity() {
 
     private lateinit var bindingView: ActivitySignupBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_signup)
@@ -49,6 +51,7 @@ class SignUpActivity : BaseActivity() {
         val data = getSignUpData()
         val validationResult = validateData(data)
         if (validationResult == VALID) {
+            AppSharedPreferences.saveUser(data.toUser())
             finish()
         } else {
             showError(validationResult)
@@ -112,6 +115,28 @@ class SignUpActivity : BaseActivity() {
         }
     }
 
+    private data class SignUpData(
+        val firstName: String,
+        val lastName: String,
+        val phoneNumber: String,
+        val cnic: String,
+        val password: String,
+        val passwordConfirmation: String,
+        val email: String,
+        val dateOfBirth: String
+    )
+
+    private fun SignUpData.toUser(): User {
+        return User(
+            firstName,
+            lastName,
+            phoneNumber,
+            cnic,
+            password,
+            email,
+            dateOfBirth
+        )
+    }
 
     private enum class ValidationResult {
         VALID,
