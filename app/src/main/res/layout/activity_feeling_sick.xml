@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".FeelingSickActivity"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/label_symptoms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/label_symptoms"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/t_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_symptoms"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Do you Feel High Fever ?"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:gravity="start"
+            android:paddingStart="10dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/answer_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/t_question"
+            android:layout_margin="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/answer_item_row"/>
+
+
+        <Button
+            android:id="@+id/bt_next"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer_recyclerview"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="40dp"
+            android:text="Next"
+            android:textAllCaps="false"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
