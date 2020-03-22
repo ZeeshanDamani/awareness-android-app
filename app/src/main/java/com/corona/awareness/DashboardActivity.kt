@@ -1,5 +1,6 @@
 package com.corona.awareness
 
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,18 +9,14 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.corona.awareness.databinding.ActivityDashboardBinding
 import com.google.android.gms.location.*
-import android.provider.Settings
-import android.util.Log
-
-
-import kotlin.math.log
 
 class DashboardActivity : BaseActivity() {
 
@@ -50,12 +47,18 @@ class DashboardActivity : BaseActivity() {
         }
 
         bindingView.notFeelWell.setOnClickListener {
-            getLastLocation()
+            goToFeelingSickActivity()
+            //getLastLocation()
         }
 
         bindingView.nearestCenters.setOnClickListener {
             goToNearestCenterActivity()
         }
+    }
+
+    private fun goToFeelingSickActivity() {
+        val intent = Intent(this, FeelingSickActivity::class.java)
+        startActivity(intent)
     }
 
     fun goToAboutActivity() {
