@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/t_servay_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="hamza"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/times_new_roman"
+        android:gravity="center|start"
+        android:paddingStart="10dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.2dp"
+        android:background="@android:color/darker_gray"/>
+
+</LinearLayout>

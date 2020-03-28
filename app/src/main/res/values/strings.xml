@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Awareness</string>
+    <string name="title_activity_nearest_center">Nearest Center</string>
+    <string name="label_symptoms">Symptoms</string>
+    <string name="label_on_marker_click_description">For information click on marker</string>
+    <string name="label_about_corona">COVID-19 is an infectious respiratory disease caused by a newly discovered coronavirus. The first case of the virus was detected in Wuhan, China on 31st December, 2019. Since then, the virus has travelled to several countries while being declared as a pandemic. The coronavirus spreads through contact with an infected person when they cough or sneeze. It also spreads when a person touches their eyes, nose or mouth after touching a surface or object that has the virus on it.</string>
+    <string name="label_more_info"><u>More Information</u></string>
+    <string name="label_previous_servay"><u>PREVIOUS SERVAYS</u></string>
+    <string name="label_view_profile">View Profile</string>
+    <string name="b_ok">OK</string>
 </resources>
