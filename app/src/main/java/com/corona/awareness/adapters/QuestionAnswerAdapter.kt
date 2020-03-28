@@ -6,11 +6,15 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.corona.awareness.R
-import com.corona.awareness.model.Answers
+import com.corona.awareness.model.questions.get_questions.questionResponse
 import kotlinx.android.synthetic.main.answer_item_row.view.*
 
-class QuestionAnswerAdapter(private val answerList: MutableList<Answers> = mutableListOf()): RecyclerView.Adapter<QuestionAnswerAdapter.ViewHolder>() {
+class QuestionAnswerAdapter(private val answerList: List<questionResponse.Qustion.Answer> = mutableListOf()
+    ,private val answerListener: ViewHolder.answerListener)
+    : RecyclerView.Adapter<QuestionAnswerAdapter.ViewHolder>() {
 
+
+    private var selectedPosition: Int = -1
 
     fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
         return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -26,18 +30,44 @@ class QuestionAnswerAdapter(private val answerList: MutableList<Answers> = mutab
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.cb_answer.text = answerList.get(position).text
-            print("-- "+answerList.get(position).text);
+            if(answerList.get(position).answerText != null && answerList.get(position).answerText.isNotEmpty()){
+                holder.cb_answer.text = answerList.get(position).answerText
+                print("-- "+answerList.get(position).answerText);
+            }else {
+                holder.cb_answer.text = "???"
+            }
+
+            //row listener
+            holder.cb_answer?.setOnClickListener{
+                selectedPosition = position
+                answerListener.onclick(answerList.get(position).answerId)
+                notifyDataSetChanged()
+            }
+
+        if(selectedPosition == position){
+            holder.cb_answer.isChecked = true
+
+        }else{
+            holder.cb_answer.isChecked = false
+        }
     }
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
+
+
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         val cb_answer = view.cb_answer
 
-        override fun onClick(p0: View?) {
 
+        interface answerListener{
+            fun onclick(answerId: Int)
         }
 
     }
+
+
+
+
+
 
 }

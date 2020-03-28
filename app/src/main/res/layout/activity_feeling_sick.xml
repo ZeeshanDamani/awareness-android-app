@@ -7,8 +7,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".FeelingSickActivity"
-        android:background="@android:color/white">
+        tools:context=".activities.FeelingSickActivity"
+        android:background="@drawable/bg">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/bt_white_round_background"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
         <TextView
             android:id="@+id/label_symptoms"
@@ -17,12 +30,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="sans-serif-black"
             android:text="@string/label_symptoms"
             android:textSize="20sp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorPrimary"
             android:gravity="center"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:fontFamily="@font/times_new_roman"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/t_question"
@@ -35,9 +49,10 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Do you Feel High Fever ?"
+            android:text=""
             android:textSize="20sp"
             android:textColor="@android:color/black"
+            android:fontFamily="@font/times_new_roman"
             android:gravity="start"
             android:paddingStart="10dp"
             />
@@ -49,7 +64,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/t_question"
-            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/answer_item_row"/>
 
@@ -60,10 +78,20 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/answer_recyclerview"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginTop="40dp"
             android:text="Next"
-            android:textAllCaps="false"/>
+            android:textSize="15sp"
+            android:fontFamily="@font/times_new_roman"
+            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/bt_white_round_background"
+            android:backgroundTint="@color/colorPrimary"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 

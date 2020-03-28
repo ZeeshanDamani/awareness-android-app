@@ -1,11 +1,20 @@
-package com.corona.awareness
+package com.corona.awareness.activities
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import com.corona.awareness.SignUpActivity.ValidationResult.*
+import android.util.Log
+import android.util.Patterns
+import com.corona.awareness.R
+import com.corona.awareness.activities.SignUpActivity.ValidationResult.*
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivitySignupBinding
 import com.corona.awareness.model.User
+import com.corona.awareness.model.signup.signupRequest
+import com.corona.awareness.model.signup.signupResponse
+import com.corona.awareness.network.RetrofitConnection
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 
@@ -52,8 +61,9 @@ class SignUpActivity : BaseActivity() {
         val data = getSignUpData()
         val validationResult = validateData(data)
         if (validationResult == VALID) {
-            AppSharedPreferences.saveUser(data.toUser())
-            finish()
+//            signupUser(data.userPhoneNumber,data.firstName,data.lastName,data.userEmail,
+//                       data.userPassword,data.dateOfBirth,1,1,data.cnic,"USER")
+            signupUser(data)
         } else {
             showError(validationResult)
         }
@@ -66,6 +76,7 @@ class SignUpActivity : BaseActivity() {
             bindingView.phoneNumber.error = null
             bindingView.password.error = null
             bindingView.passwordConfirmation.error = null
+            bindingView.email.error = null
             bindingView.dateOfBirth.error = null
         }
 
@@ -76,41 +87,44 @@ class SignUpActivity : BaseActivity() {
             INVALID_LAST_NAME -> bindingView.lastName.error = "Enter last name"
             INVALID_PHONE -> bindingView.phoneNumber.error = "Enter phone number"
             INVALID_PASSWORD -> bindingView.password.error = "Enter a password"
+            INVALID_EMAIL -> bindingView.email.error = "Invalid email"
             PASSWORD_MISS_MATCH -> bindingView.passwordConfirmation.error = "Password miss match"
             INVALID_DOB -> bindingView.dateOfBirth.error = "Select a date"
             else -> {}
         }
     }
 
-    private fun getSignUpData(): SignUpData {
+    private fun getSignUpData(): signupRequest {
+        val phoneNumber = bindingView.phoneNumber.text.toString()
         val firstName = bindingView.firstName.text.toString()
         val lastName = bindingView.lastName.text.toString()
-        val phoneNumber = bindingView.phoneNumber.text.toString()
         val cnic = bindingView.cnic.text.toString()
         val password = bindingView.password.text.toString()
-        val passwordConfirmation = bindingView.passwordConfirmation.text.toString()
         val email = bindingView.email.text.toString()
         val dateOfBirth = bindingView.dateOfBirth.text.toString()
 
-        return SignUpData(
+        return signupRequest(
+            phoneNumber,
             firstName,
             lastName,
-            phoneNumber,
-            cnic,
-            password,
-            passwordConfirmation,
             email,
-            dateOfBirth
+            password,
+            dateOfBirth,
+            1,
+            1,
+            cnic,
+            "USER"
         )
     }
 
-    private fun validateData(data: SignUpData): ValidationResult {
+    private fun validateData(data: signupRequest): ValidationResult {
         return when {
             data.firstName.isBlank() -> INVALID_FIRST_NAME
             data.lastName.isBlank() -> INVALID_LAST_NAME
-            data.phoneNumber.isBlank() -> INVALID_PHONE
-            data.password.isBlank() -> INVALID_PASSWORD
-            !data.password.contentEquals(data.passwordConfirmation) -> PASSWORD_MISS_MATCH
+            data.userPhoneNumber.isBlank() -> INVALID_PHONE
+            data.userPassword.isBlank() -> INVALID_PASSWORD
+            !data.userPassword.contentEquals(bindingView.passwordConfirmation.text.toString()) -> PASSWORD_MISS_MATCH
+            Patterns.EMAIL_ADDRESS.toRegex().matches(data.userEmail) -> INVALID_EMAIL
             data.dateOfBirth.isBlank() -> INVALID_DOB
             else -> VALID
         }
@@ -145,7 +159,71 @@ class SignUpActivity : BaseActivity() {
         INVALID_LAST_NAME,
         INVALID_PHONE,
         INVALID_PASSWORD,
+        INVALID_EMAIL,
         PASSWORD_MISS_MATCH,
         INVALID_DOB
     }
+
+    private fun signupUser(signupRequest: signupRequest) {
+
+        var call = RetrofitConnection.getAPIClient("").signupUser(signupRequest)
+
+        call.enqueue(object : Callback<signupResponse>{
+            override fun onFailure(call: Call<signupResponse>, t: Throwable) {
+                Log.e("signupW Error" ,""+t.message)
+            }
+
+            override fun onResponse(
+                call: Call<signupResponse>,
+                response: Response<signupResponse>
+            ) {
+                if(response.isSuccessful){
+                    val signupResponse = response.body()
+
+                        AppSharedPreferences.saveUser(signupRequest)
+                        finish()
+
+                    Log.e("qq" ,""+signupResponse?.success)
+                    Log.e("qq" ,""+signupResponse?.responseCode)
+                    Log.e("qq" ,""+signupResponse?.message)
+                }else{
+                    Log.e("qq->" ,""+response.errorBody())
+                }
+            }
+
+        })
+
+
+        // var gson = Gson()
+        //retrofit call with courotines
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val response = RetrofitConnection.getAPIClient("").signupUser(phone,firstName,lastName,userEmail,userPassword,
+//                                                                        dateOfBirth,cityId,countryId,cnic,accessType)
+//            withContext(Dispatchers.Main){
+//                try {
+//                    if (response.isSuccessful) {
+//
+//                        Log.e("signupResponse - ", ""+response.code())
+//
+//                        AppSharedPreferences.saveUser(signupRequest)
+//                        finish()
+//
+//                        //Do something with response e.g show to the UI.
+//                    } else {
+//                        print("Error: ${response.code()}")
+//                    }
+//                } catch (e: HttpException) {
+//                    print("Exception ${e.message}")
+//                    //toast()
+//                } catch (e: Throwable) {
+//                    print("Ooops: Something else went wrong")
+//                }
+//            }
+//
+//        }
+
+    }
+
+
+
 }
