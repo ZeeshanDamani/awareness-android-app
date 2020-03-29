@@ -7,6 +7,10 @@
     <CheckBox
         android:id="@+id/cb_answer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:padding="8dp"
+        android:buttonTint="@color/colorPrimary"
+        android:fontFamily="@font/times_new_roman"/>
 
 </LinearLayout>

@@ -1,8 +1,7 @@
-package com.corona.awareness
+package com.corona.awareness.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.corona.awareness.databinding.ActivityAboutCoronaBinding
+import com.corona.awareness.R
 import com.corona.awareness.databinding.ActivityWhoGuidelinesBinding
 
 class WhoGuidelinesActivity : BaseActivity() {

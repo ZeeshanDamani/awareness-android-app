@@ -5,7 +5,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WhoGuidelinesActivity">
+    tools:context=".activities.WhoGuidelinesActivity">
 
     <WebView
         android:id="@+id/who_guidelines_web_view"

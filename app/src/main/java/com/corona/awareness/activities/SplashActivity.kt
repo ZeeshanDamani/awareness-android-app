@@ -1,13 +1,9 @@
-package com.corona.awareness
+package com.corona.awareness.activities
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
+import com.corona.awareness.R
 
 class SplashActivity : AppCompatActivity() {
 

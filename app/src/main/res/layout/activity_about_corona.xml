@@ -6,7 +6,57 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".AboutCoronaActivity">
+        tools:context=".activities.AboutCoronaActivity"
+        android:background="@drawable/bg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bt_white_round_background"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp">
+
+
+            <TextView
+                android:id="@+id/label_about_corona"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_about_corona"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                android:gravity="start"
+                android:padding="10dp"
+                android:visibility="visible"
+                android:layout_margin="10dp"
+                android:fontFamily="@font/times_new_roman"
+                />
+
+
+            <TextView
+                android:id="@+id/label_more_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_more_info"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/label_about_corona"
+                android:textSize="17sp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:fontFamily="@font/times_new_roman"
+                android:gravity="end"
+                android:padding="10dp"
+                android:visibility="visible"
+                android:layout_margin="10dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <WebView
             android:id="@+id/about_web_view"
@@ -17,6 +67,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:visibility="gone"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
