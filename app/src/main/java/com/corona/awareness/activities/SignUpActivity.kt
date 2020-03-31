@@ -2,6 +2,7 @@ package com.corona.awareness.activities
 
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import com.corona.awareness.R
 import com.corona.awareness.activities.SignUpActivity.ValidationResult.*
 import com.corona.awareness.configs.AppSharedPreferences
@@ -22,8 +23,22 @@ class SignUpActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_signup)
-        setTitle("Signup")
+        setUpToolBar()
         setupUI()
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(bindingView.toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+            it.title = ""
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun setupUI() {
