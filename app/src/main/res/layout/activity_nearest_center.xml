@@ -3,30 +3,43 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@android:color/white">
 
-
-        <TextView
-            android:id="@+id/label_on_marker_click_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_on_marker_click_description"
-            android:textColor="@color/colorPrimary"
-            android:textSize="17sp"
-            android:padding="10dp" />
-
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activities.NearestCenterActivity"
-            />
+            android:orientation="vertical"
+            android:background="@color/yellow">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:id="@+id/label_on_marker_click_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_on_marker_click_description"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:padding="10dp" />
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".activities.NearestCenterActivity"
+                />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+        <include layout="@layout/bottom_sheet_layout" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 
     </layout>

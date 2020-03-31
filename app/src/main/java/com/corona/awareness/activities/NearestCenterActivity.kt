@@ -2,6 +2,8 @@ package com.corona.awareness.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.corona.awareness.R
 import com.corona.awareness.databinding.ActivityNearestCenterBinding
 import com.corona.awareness.helper.java.CustomMarkerInfoWindowView
@@ -12,6 +14,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.bottom_sheet_layout.*
 
 
 class NearestCenterActivity : BaseActivity(), OnMapReadyCallback {
@@ -20,6 +24,7 @@ class NearestCenterActivity : BaseActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var bindingView: ActivityNearestCenterBinding
     val markersList: MutableList<Marker> = mutableListOf()
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +33,33 @@ class NearestCenterActivity : BaseActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        bottomSheetBehavior = BottomSheetBehavior.from<ConstraintLayout>(bottomSheet)
+        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+
+            }
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+
+                    }
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+
+                    }
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+
+                    }
+                    BottomSheetBehavior.STATE_SETTLING -> {
+
+                    }
+                }
+            }
+        })
     }
 
     /**
@@ -61,10 +93,25 @@ class NearestCenterActivity : BaseActivity(), OnMapReadyCallback {
         var customInfoWindow = CustomMarkerInfoWindowView(this)
         mMap.setInfoWindowAdapter(customInfoWindow)
 
+        mMap.setOnMarkerClickListener { marker ->
+            slideUpDownBottomSheet()
+            true
+        }
+
       //  showOrHideInfoWindows()
 
 
 
+    }
+
+    private fun slideUpDownBottomSheet() {
+        if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        } else {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED;
+
+        }
     }
 
 

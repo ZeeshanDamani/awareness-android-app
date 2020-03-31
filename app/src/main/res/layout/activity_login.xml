@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg"
+        android:background="@drawable/bt_white_round_background"
         tools:context=".activities.LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,11 +14,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/bt_white_round_background"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,10 +44,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/label_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_phone_number"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:paddingStart="10dp"/>
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/userPhone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:hint="Phone Number"
                 android:inputType="numberDecimal"
                 android:text="923323293848"
@@ -56,16 +65,27 @@
                 android:fontFamily="@font/times_new_roman"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/invalid_auth_text"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:paddingStart="10dp" />
+                android:paddingStart="10dp"
+                android:background="@drawable/round_border_layout"/>
+
+
+            <TextView
+                android:id="@+id/label_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_password"
+                android:textSize="15sp"
+                android:paddingStart="10dp"
+                android:textColor="@android:color/black"/>
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:text="1234"
@@ -74,52 +94,62 @@
                 android:fontFamily="@font/times_new_roman"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/userPhone"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:paddingStart="10dp"/>
+                android:paddingStart="10dp"
+                android:background="@drawable/round_border_layout"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="10dp"
-                android:layout_margin="10dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:padding="10dp"-->
+<!--                android:layout_margin="10dp">-->
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/login_btn"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Login"
+                    android:text="@string/label_signin"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
-                    android:textSize="15sp"
+                    android:textSize="17sp"
                     android:fontFamily="@font/times_new_roman"
                     app:layout_constraintTop_toBottomOf="@+id/password"
                     android:background="@drawable/bt_corner_ripple_effect_bg"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sign_up_btn"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Sign Up"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="15sp"
-                    android:fontFamily="@font/times_new_roman"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/bt_corner_ripple_effect_bg"/>
+<!--                <androidx.appcompat.widget.AppCompatButton-->
+<!--                    android:id="@+id/sign_up_btn"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Sign Up"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@android:color/white"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:fontFamily="@font/times_new_roman"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:layout_marginEnd="5dp"-->
+<!--                    android:background="@drawable/bt_corner_ripple_effect_bg"/>-->
 
 
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
+
+            <TextView
+                android:id="@+id/label_create_an_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_create_an_account"
+                android:textColor="@android:color/black"
+                android:textSize="15sp"
+                android:paddingStart="10dp"
+                android:layout_marginTop="20dp"/>
+
 
 
         </LinearLayout>

@@ -38,13 +38,13 @@ object AppSharedPreferences {
 
     fun saveUser(user: signupRequest) {
         val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
-        editor.putString(FIRST_NAME, user.firstName)
-        editor.putString(LAST_NAME, user.lastName)
+        editor.putString(FIRST_NAME, user.fullName)
+        //editor.putString(LAST_NAME, user.lastName)
         editor.putString(PHONE_NUMBER, user.userPhoneNumber)
-        editor.putString(CNIC, user.cnic)
+       // editor.putString(CNIC, user)
         editor.putString(PASSWORD, user.userPassword)
-        editor.putString(EMAIL, user.userEmail)
-        editor.putString(DOB, user.dateOfBirth)
+        //editor.putString(EMAIL, user.em)
+        //editor.putString(DOB, user.dateOfBirth)
         editor.apply()
         editor.commit()
     }

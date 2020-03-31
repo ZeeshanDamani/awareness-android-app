@@ -1,11 +1,54 @@
 <resources>
     <string name="app_name">Awareness</string>
     <string name="title_activity_nearest_center">Nearest Center</string>
-    <string name="label_symptoms">Symptoms</string>
+    <string name="label_symptoms">Symptoms?</string>
     <string name="label_on_marker_click_description">For information click on marker</string>
-    <string name="label_about_corona">COVID-19 is an infectious respiratory disease caused by a newly discovered coronavirus. The first case of the virus was detected in Wuhan, China on 31st December, 2019. Since then, the virus has travelled to several countries while being declared as a pandemic. The coronavirus spreads through contact with an infected person when they cough or sneeze. It also spreads when a person touches their eyes, nose or mouth after touching a surface or object that has the virus on it.</string>
+    <string name="label_about_corona">What is COVID-19?</string>
     <string name="label_more_info"><u>More Information</u></string>
     <string name="label_previous_servay"><u>PREVIOUS SERVAYS</u></string>
     <string name="label_view_profile">View Profile</string>
     <string name="b_ok">OK</string>
+    <string name="t_about_corona">COVID-19 is an infectious respiratory disease caused by a newly discovered coronavirus. The first case of the virus was detected in Wuhan, China on 31st December, 2019. Since then, the virus has travelled to several countries while being declared as a pandemic. The coronavirus spreads through contact with an infected person when they cough or sneeze. It also spreads when a person touches their eyes, nose or mouth after touching a surface or object that has the virus on it.</string>
+    <string name="label_how_to_safe">How to be safe?</string>
+    <string name="t_how_to_safe">The best way to prevent the infection from spreading is to wash your hands with soap and water or an alcohol-based hand sanitizer. Other ways of preventing oneself from getting the virus include: \n
+        \u2022 Maintaining a distance of at least 1 meter \n
+        \u2022 Covering your mouth and nose while coughing/sneezing \n
+        \u2022 Avoid touching your face, \n
+        \u2022 Maintain social distancing.</string>
+    <string name="t_symptoms">Most people affected by COVID-19 are likely to have mild to moderate symptoms that may not require special treatment. People at high risks are mostly
+        the ones who have underlying medical conditions or those above 60 years. \n
+        Common symptoms of the virus include: \n
+        \u2022 Fever \n
+        \u2022 Dry Cough \n
+        \u2022 Fatigue \n
+        In case if the situation escalates, the patients are likely to experience the following: \n
+        \u2022 Shortness of breath
+        \u2022 Body ache
+        \u2022 Sore throat \n A few people might experience diarrhoea, nausea or a runny nose. </string>
+    <string name="label_who">WHO Guidelines</string>
+    <string name="t_who"> Stay at home and avoid unnecessary contact. \n
+        \u2022 In case of fever, cough and shortness of breath seek immediate medical help. \n
+        \u2022 Take all sorts of preventive measures to stop the spread of coronavirus. \n
+        \u2022 Remain updated on the latest developments about COVID-19 as made available on the WHO website and app. \n</string>
+    <string name="label_phone_number">Phone number</string>
+    <string name="label_password">Password</string>
+    <string name="label_signin">Sign in</string>
+    <string name="label_create_an_account">Create a new account..</string>
+    <string name="label_create_an_account1">Create an \n account</string>
+    <string name="label_full_name">Full name</string>
+    <string name="label_confirm_password">Confirm password</string>
+    <string name="label_edit_profile">Edit profile</string>
+    <string name="label_diagonose">Diagnosis history</string>
+    <string name="label_my_profile">My Profile</string>
+    <string name="label_contact_detail">CONTACT DETAILS</string>
+    <string name="label_new_password">New password</string>
+    <string name="label_old_password">Old password</string>
+    <string name="label_email">Email (optional)</string>
+    <string name="label_update_detail">Update details</string>
+    <string name="label_personal_detail">PERSONAL DETAILS</string>
+    <string name="label_required_for_diagonsis">Requried for diagnosis</string>
+    <string name="label_cnic">CNIC</string>
+    <string name="label_gender">Gender</string>
+    <string name="label_city">CIty</string>
+
 </resources>
