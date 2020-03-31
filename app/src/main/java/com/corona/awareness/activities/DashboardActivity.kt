@@ -136,10 +136,6 @@ class DashboardActivity : BaseActivity(), LocationListener,
         bindingView.nearestCenters.setOnClickListener {
             goToNearestCenterActivity()
         }
-
-        /*bindingView.labelViewProfile.setOnClickListener {
-            goToProfileActivity()
-        }*/
     }
 
     private fun goToProfileActivity() {
