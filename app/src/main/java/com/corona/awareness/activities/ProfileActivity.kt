@@ -32,13 +32,11 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
         val name: List<String> = Awareness.loginData?.user?.username.toString().split(" ")
 
         bindingView.tFirstName.setText("" + Awareness.loginData?.user?.firstName)
-        bindingView.tLastName.setText("" + Awareness.loginData?.user?.lastName)
         bindingView.tPhone.setText("" + Awareness.loginData?.user?.phoneNumber)
-        bindingView.tDateBirth.setText("" + Awareness.loginData?.user?.dateOfBirth)
-        bindingView.tEmail.setText("")
+        bindingView.tEmail.setText(""+Awareness.loginData?.user?.email)
         bindingView.tCnic.setText("" + Awareness.loginData?.user?.cnic)
 
-        setupServays()
+
 
     }
 
@@ -64,7 +62,7 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
                         Log.e("qq Data", "" + response.body()?.userSurveys?.get(0)?.assessmentTime)
-                        bindingView.previousServayRecyclerview.adapter = ServayAdapter(response.body()!!.userSurveys,servayListener)
+                       // bindingView.previousServayRecyclerview.adapter = ServayAdapter(response.body()!!.userSurveys,servayListener)
 
 
                     } else {

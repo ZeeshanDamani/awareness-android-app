@@ -1,9 +1,7 @@
 package com.corona.awareness.activities
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import com.corona.awareness.R
 import com.corona.awareness.activities.SignUpActivity.ValidationResult.*
 import com.corona.awareness.configs.AppSharedPreferences
@@ -15,7 +13,6 @@ import com.corona.awareness.network.RetrofitConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 
 class SignUpActivity : BaseActivity() {
@@ -30,27 +27,27 @@ class SignUpActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        bindingView.dateOfBirth.apply {
-
-            fun setDate(year: Int, month: Int, day: Int) {
-                setText("$day/$month/$year")
-            }
-
-            setOnClickListener {
-
-                val calendar = Calendar.getInstance()
-                val currentYear = calendar.get(Calendar.YEAR) // current year
-                val currentMonth = calendar.get(Calendar.MONTH) // current month
-                val currentDay = calendar.get(Calendar.DAY_OF_MONTH) // current day
-
-                DatePickerDialog(
-                    this@SignUpActivity,
-                    DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                        setDate(year, month, dayOfMonth)
-                    }, currentYear, currentMonth, currentDay
-                ).show()
-            }
-        }
+//        bindingView.dateOfBirth.apply {
+//
+//            fun setDate(year: Int, month: Int, day: Int) {
+//                setText("$day/$month/$year")
+//            }
+//
+//            setOnClickListener {
+//
+//                val calendar = Calendar.getInstance()
+//                val currentYear = calendar.get(Calendar.YEAR) // current year
+//                val currentMonth = calendar.get(Calendar.MONTH) // current month
+//                val currentDay = calendar.get(Calendar.DAY_OF_MONTH) // current day
+//
+//                DatePickerDialog(
+//                    this@SignUpActivity,
+//                    DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+//                        setDate(year, month, dayOfMonth)
+//                    }, currentYear, currentMonth, currentDay
+//                ).show()
+//            }
+//        }
 
         bindingView.signUpBtn.setOnClickListener {
             validateAndSignUp()
@@ -71,61 +68,57 @@ class SignUpActivity : BaseActivity() {
 
     private fun showError(result: ValidationResult) {
         fun resetError() {
-            bindingView.firstName.error = null
-            bindingView.lastName.error = null
+            bindingView.fullName.error = null
+          //  bindingView.lastName.error = null
             bindingView.phoneNumber.error = null
             bindingView.password.error = null
             bindingView.passwordConfirmation.error = null
-            bindingView.email.error = null
-            bindingView.dateOfBirth.error = null
+         //   bindingView.email.error = null
+         //   bindingView.dateOfBirth.error = null
         }
 
         resetError()
 
         when (result) {
-            INVALID_FIRST_NAME -> bindingView.firstName.error = "Enter first name"
-            INVALID_LAST_NAME -> bindingView.lastName.error = "Enter last name"
+            INVALID_FIRST_NAME -> bindingView.fullName.error = "Enter full name"
+           // INVALID_LAST_NAME -> bindingView.lastName.error = "Enter last name"
             INVALID_PHONE -> bindingView.phoneNumber.error = "Enter phone number"
             INVALID_PASSWORD -> bindingView.password.error = "Enter a password"
-            INVALID_EMAIL -> bindingView.email.error = "Invalid email"
+           // INVALID_EMAIL -> bindingView.email.error = "Invalid email"
             PASSWORD_MISS_MATCH -> bindingView.passwordConfirmation.error = "Password miss match"
-            INVALID_DOB -> bindingView.dateOfBirth.error = "Select a date"
+           // INVALID_DOB -> bindingView.dateOfBirth.error = "Select a date"
             else -> {}
         }
     }
 
     private fun getSignUpData(): signupRequest {
         val phoneNumber = bindingView.phoneNumber.text.toString()
-        val firstName = bindingView.firstName.text.toString()
-        val lastName = bindingView.lastName.text.toString()
-        val cnic = bindingView.cnic.text.toString()
+        val firstName = bindingView.fullName.text.toString()
+       // val lastName = bindingView.lastName.text.toString()
+       // val cnic = bindingView.cnic.text.toString()
         val password = bindingView.password.text.toString()
-        val email = bindingView.email.text.toString()
-        val dateOfBirth = bindingView.dateOfBirth.text.toString()
+       /// val email = bindingView.email.text.toString()
+       // val dateOfBirth = bindingView.dateOfBirth.text.toString()
 
         return signupRequest(
             phoneNumber,
             firstName,
-            lastName,
-            email,
             password,
-            dateOfBirth,
             1,
             1,
-            cnic,
             "USER"
         )
     }
 
     private fun validateData(data: signupRequest): ValidationResult {
         return when {
-            data.firstName.isBlank() -> INVALID_FIRST_NAME
-            data.lastName.isBlank() -> INVALID_LAST_NAME
+            data.fullName.isBlank() -> INVALID_FIRST_NAME
+          //  data.lastName.isBlank() -> INVALID_LAST_NAME
             data.userPhoneNumber.isBlank() -> INVALID_PHONE
             data.userPassword.isBlank() -> INVALID_PASSWORD
             !data.userPassword.contentEquals(bindingView.passwordConfirmation.text.toString()) -> PASSWORD_MISS_MATCH
-            Patterns.EMAIL_ADDRESS.toRegex().matches(data.userEmail) -> INVALID_EMAIL
-            data.dateOfBirth.isBlank() -> INVALID_DOB
+         //   Patterns.EMAIL_ADDRESS.toRegex().matches(data.userEmail) -> INVALID_EMAIL
+          //  data.dateOfBirth.isBlank() -> INVALID_DOB
             else -> VALID
         }
     }
