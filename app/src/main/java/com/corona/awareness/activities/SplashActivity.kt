@@ -10,7 +10,11 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        goToLoginActivity()
+    }
+
+    override fun onResume() {
+        super.onResume()
+       goToLoginActivity()
     }
 
     private fun goToLoginActivity() {
