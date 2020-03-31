@@ -30,7 +30,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        bindingView.signUpBtn.setOnClickListener {
+        bindingView.labelCreateAnAccount.setOnClickListener {
 
             goToSignUpActivity()
 
@@ -101,7 +101,7 @@ class LoginActivity : BaseActivity() {
                             if (loginResponse?.success!!) {
                                 AppSharedPreferences.put(loginResponse, Constants.LOGIN_OBJECT)
                                 goToDashboardActivity()
-                                Log.e("login", "" + loginResponse?.city?.name)
+                                //  Log.e("login", "" + loginResponse?.city?.name)
                                 Log.e("login", "" + loginResponse?.token)
                             } else {
                                 Log.e("login-Failed", loginResponse.message)
