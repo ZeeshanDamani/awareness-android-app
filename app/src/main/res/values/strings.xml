@@ -50,5 +50,7 @@
     <string name="label_cnic">CNIC</string>
     <string name="label_gender">Gender</string>
     <string name="label_city">CIty</string>
+    <string name="label_diagonose_history">Diagnosis \nhistory</string>
+    <string name="label_date_of_birth">Date of birth</string>
 
 </resources>
