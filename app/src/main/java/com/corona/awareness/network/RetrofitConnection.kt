@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitConnection {
 
-    private var BASE_URL: String = "http://34.245.192.132:8080"
+    private var BASE_URL: String = "http://34.245.192.132:8011"
     private val PACKAGE: String = "/api/v1/"
     private lateinit var client: OkHttpClient
 

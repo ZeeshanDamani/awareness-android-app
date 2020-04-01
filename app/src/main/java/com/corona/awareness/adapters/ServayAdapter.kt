@@ -21,8 +21,8 @@ class ServayAdapter(private val servayList: List<servayResponse.UserSurvey> = mu
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.time.setText("Time : "+servayList.get(position).assessmentTime)
-        holder.latitude.setText("Latitude :"+servayList.get(position).latitude)
-        holder.longitude.setText("Longitude : "+servayList.get(position).longitude)
+        holder.t_desc_text.setText("lorem ipsum")
+        holder.t_condition.setText("Condition")
 
         holder.itemView.setOnClickListener{
             if(servayListener != null){
@@ -43,9 +43,9 @@ class ServayAdapter(private val servayList: List<servayResponse.UserSurvey> = mu
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
       //  val date = itemView.t_ass_date
-        val time = itemView.t_ass_time
-        val latitude = itemView.t_latitude
-        val longitude = itemView.t_logitude
+        val time = itemView.t_assign_time
+        val t_desc_text = itemView.t_desc_text
+        val t_condition = itemView.t_condition
 
         interface servayListener{
             fun onClick(servayResponse: servayResponse.UserSurvey)
