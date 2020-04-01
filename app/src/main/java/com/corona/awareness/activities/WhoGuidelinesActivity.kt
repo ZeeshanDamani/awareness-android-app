@@ -11,7 +11,21 @@ class WhoGuidelinesActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_who_guidelines)
-        setTitle("World Health Organisation Guide")
+        setUpToolBar()
         bindingView.whoGuidelinesWebView.loadUrl("https://www.who.int/health-topics/coronavirus")
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(bindingView.toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+            it.title = "W.H.O. Guidance"
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

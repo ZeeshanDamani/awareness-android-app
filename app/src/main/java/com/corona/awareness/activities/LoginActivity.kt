@@ -24,16 +24,12 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_login)
         AppSharedPreferences.init(this)
-        setTitle("Login")
         setupUI()
-
     }
 
     private fun setupUI() {
         bindingView.labelCreateAnAccount.setOnClickListener {
-
             goToSignUpActivity()
-
         }
         bindingView.loginBtn.setOnClickListener {
             performAuth()
@@ -49,16 +45,15 @@ class LoginActivity : BaseActivity() {
         val userPhone = bindingView.userPhone.text.toString();
         val userPassword = bindingView.password.text.toString();
 
-      //  if (isAuthenticate(userPhone, userPassword)) {
-            val loginData = getloginData()
-            val  validateResult = validateData(loginData)
-            if(validateResult == ValidationResult.VALID){
-                progressBar = Utils.openProgressDialog(this)
-                loginUser(loginData)
-
-            }else{
-                    showError(validateResult)
-            }
+        //  if (isAuthenticate(userPhone, userPassword)) {
+        val loginData = getloginData()
+        val validateResult = validateData(loginData)
+        if (validateResult == ValidationResult.VALID) {
+            progressBar = Utils.openProgressDialog(this)
+            loginUser(loginData)
+        } else {
+            showError(validateResult)
+        }
 
 //        } else {
 ////            bindingView.invalidAuthText.text = "invalid login"
@@ -71,7 +66,6 @@ class LoginActivity : BaseActivity() {
         return phoneNumber == user.phoneNumber
                 && password == user.password
     }
-
 
 
     private fun getloginData(): loginRequest {
@@ -115,7 +109,6 @@ class LoginActivity : BaseActivity() {
         })
 
     }
-
 
 
     private fun validateData(data: loginRequest): ValidationResult {

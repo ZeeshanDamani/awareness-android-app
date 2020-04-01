@@ -20,6 +20,7 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
         bindingView = setContentViewDataBinding(R.layout.activity_profile)
         setTitle("Profile")
         servayListener = this
+        setUpToolBar()
         setupUI()
     }
 
@@ -32,6 +33,7 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
         bindingView.tEmail.setText(""+Awareness.loginData?.user?.email)
         bindingView.tCnic.setText("" + Awareness.loginData?.user?.cnic)
 
+
         bindingView.btEditProfile.setOnClickListener{
             startActivity(Intent(this,ProfileEditActivity::class.java))
         }
@@ -39,8 +41,21 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
             startActivity(Intent(this,DiagnosisHistoryActivity::class.java))
         }
 
+    }
 
 
+    private fun setUpToolBar() {
+        setSupportActionBar(bindingView.toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+            it.title = ""
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onClick(servayResponse: servayResponse.UserSurvey) {

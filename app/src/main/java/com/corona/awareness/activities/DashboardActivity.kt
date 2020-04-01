@@ -14,6 +14,8 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.corona.awareness.Awareness
@@ -39,7 +41,7 @@ class DashboardActivity : BaseActivity(), LocationListener,
     GoogleApiClient.OnConnectionFailedListener {
 
     public var latitude: String? = null
-    public  var longitude: String? = null
+    public var longitude: String? = null
     private var login: loginResponse? = null
     private lateinit var loginData: loginResponse
     private lateinit var mLocationManager: LocationManager
@@ -50,21 +52,20 @@ class DashboardActivity : BaseActivity(), LocationListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_dashboard)
-
+        setUpToolBar()
         login = AppSharedPreferences.get<loginResponse>(Constants.LOGIN_OBJECT)
-        if(login?.success!!){
+        if (login?.success!!) {
             Awareness.loginData = login
-            Log.e("qq user -",""+ login?.token)
-            Log.e("qq user?? -",""+ Awareness.loginData!!.token)
+            Log.e("qq user -", "" + login?.token)
+            Log.e("qq user?? -", "" + Awareness.loginData!!.token)
         }
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        setTitle("Dashboard")
 
         setupUI()
         enableGPSAutomatically()
-       // getLastLocation()
+        // getLastLocation()
 
 
         mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -87,10 +88,35 @@ class DashboardActivity : BaseActivity(), LocationListener,
             return;
         }
 
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,50000,0F,this)
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50000, 0F, this)
 
     }
 
+    private fun setUpToolBar() {
+        setSupportActionBar(bindingView.toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+            it.title = ""
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.dashboard_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.profile) {
+            goToProfileActivity()
+            true
+        } else super.onOptionsItemSelected(item)
+    }
 
     fun setupUI() {
 
@@ -109,10 +135,6 @@ class DashboardActivity : BaseActivity(), LocationListener,
 
         bindingView.nearestCenters.setOnClickListener {
             goToNearestCenterActivity()
-        }
-
-        bindingView.labelViewProfile.setOnClickListener {
-            goToProfileActivity()
         }
     }
 
@@ -141,16 +163,13 @@ class DashboardActivity : BaseActivity(), LocationListener,
     }
 
 
-
     override fun onLocationChanged(location: Location?) {
         Log.e("lati ", " " + location?.latitude)
         Log.e("longi ", " " + location?.longitude)
-        Constants.latitude = ""+location?.latitude
-        Constants.longitude = ""+location?.longitude
-        pingUserLocation(location?.latitude.toString(),location?.longitude.toString())
+        Constants.latitude = "" + location?.latitude
+        Constants.longitude = "" + location?.longitude
+        pingUserLocation(location?.latitude.toString(), location?.longitude.toString())
     }
-
-
 
 
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
@@ -165,27 +184,28 @@ class DashboardActivity : BaseActivity(), LocationListener,
 
     }
 
-    private fun pingUserLocation(latitude: String,longitude: String){
-        val call =  RetrofitConnection.getAPIClient(login?.token!!)
-                                        .sendUserPings(""+login?.user?.id, setRecordRequest(latitude,longitude))
-        call.enqueue(object : Callback<recordResponse>{
+    private fun pingUserLocation(latitude: String, longitude: String) {
+        val call = RetrofitConnection.getAPIClient(login?.token!!)
+            .sendUserPings("" + login?.user?.id, setRecordRequest(latitude, longitude))
+        call.enqueue(object : Callback<recordResponse> {
             override fun onFailure(call: Call<recordResponse>, t: Throwable) {
-                Log.e("DSG ",""+t.message)
+                Log.e("DSG ", "" + t.message)
             }
+
             override fun onResponse(
                 call: Call<recordResponse>,
                 response: Response<recordResponse>
             ) {
-                if(response.code() == 200){
-                    if(response.isSuccessful){
-                        if(response.body()?.success!!){
-                            Log.e("success",""+response.body()?.success)
+                if (response.code() == 200) {
+                    if (response.isSuccessful) {
+                        if (response.body()?.success!!) {
+                            Log.e("success", "" + response.body()?.success)
                         }
-                    }else{
-                        Log.e("Failed",""+response.errorBody())
+                    } else {
+                        Log.e("Failed", "" + response.errorBody())
                     }
 
-                }else if(response.code() == 401){
+                } else if (response.code() == 401) {
                     goToLginActivity()
                 }
             }
@@ -193,8 +213,8 @@ class DashboardActivity : BaseActivity(), LocationListener,
 
     }
 
-    private fun setRecordRequest(latitude: String,longitude: String): recordRequest{
-        return recordRequest("1584960348","ANDROID", latitude, longitude, login?.user?.id!!)
+    private fun setRecordRequest(latitude: String, longitude: String): recordRequest {
+        return recordRequest("1584960348", "ANDROID", latitude, longitude, login?.user?.id!!)
     }
 
 

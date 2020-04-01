@@ -34,7 +34,7 @@
     <string name="label_password">Password</string>
     <string name="label_signin">Sign in</string>
     <string name="label_create_an_account">Create a new account..</string>
-    <string name="label_create_an_account1">Create an \n account</string>
+    <string name="label_create_an_account1">Create an \naccount</string>
     <string name="label_full_name">Full name</string>
     <string name="label_confirm_password">Confirm password</string>
     <string name="label_edit_profile">Edit profile</string>
