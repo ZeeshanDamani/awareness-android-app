@@ -2,6 +2,8 @@ package com.corona.awareness.network
 
 import com.corona.awareness.model.login.loginRequest
 import com.corona.awareness.model.login.loginResponse
+import com.corona.awareness.model.profile.profileRequest
+import com.corona.awareness.model.profile.profileResponse
 import com.corona.awareness.model.questions.get_questions.questionResponse
 import com.corona.awareness.model.questions.post_answers.request.postAnswerRequest
 import com.corona.awareness.model.questions.post_answers.response.postAnswerResponse
@@ -11,21 +13,21 @@ import com.corona.awareness.model.servay.servayResponse
 import com.corona.awareness.model.signup.signupRequest
 import com.corona.awareness.model.signup.signupResponse
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 
 interface APIInterface {
 
 
-    @POST("user/signup")
+    @POST("users/signup")
     fun signupUser(@Body signupRequest: signupRequest): Call<signupResponse>
 
 
-    @POST("user/login")
+    @POST("users/login")
     fun loginUser(@Body loginRequest: loginRequest): Call<loginResponse>
+
+    @PUT("users/{id}")
+    fun profileEdit(@Path("id") userId: String,@Body profileRequest: profileRequest): Call<profileResponse>
 
 
     @GET("questionnaire/questions")

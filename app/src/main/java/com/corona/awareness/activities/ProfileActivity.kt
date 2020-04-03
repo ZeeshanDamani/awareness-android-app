@@ -1,16 +1,12 @@
 package com.corona.awareness.activities
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.corona.awareness.Awareness
 import com.corona.awareness.R
 import com.corona.awareness.adapters.ServayAdapter
 import com.corona.awareness.databinding.ActivityProfileBinding
 import com.corona.awareness.model.servay.servayResponse
-import com.corona.awareness.network.RetrofitConnection
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
 
@@ -30,13 +26,19 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
 
     private fun setupUI() {
 
-        val name: List<String> = Awareness.loginData?.user?.username.toString().split(" ")
+        //  val name: List<String> = Awareness.loginData?.user?.username.toString().split(" ")
 
         bindingView.tFirstName.setText("" + Awareness.loginData?.user?.firstName)
         bindingView.tPhone.setText("" + Awareness.loginData?.user?.phoneNumber)
-        bindingView.tEmail.setText(""+Awareness.loginData?.user?.email)
+        bindingView.tEmail.setText("" + Awareness.loginData?.user?.email)
         bindingView.tCnic.setText("" + Awareness.loginData?.user?.cnic)
 
+        bindingView.btEditProfile.setOnClickListener {
+            startActivity(Intent(this, ProfileEditActivity::class.java))
+        }
+        bindingView.btDiagonose.setOnClickListener {
+            startActivity(Intent(this, DiagnosisHistoryActivity::class.java))
+        }
     }
 
     private fun setUpToolBar() {
@@ -57,37 +59,5 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
 
     }
 
-    private fun setupServays() {
 
-        val call =
-            RetrofitConnection.getAPIClient(Awareness?.loginData?.token!!)
-                .getAllUserServeys(""+Awareness.loginData?.user?.id)
-
-        call.enqueue(object : Callback<servayResponse> {
-            override fun onFailure(call: Call<servayResponse>, t: Throwable) {
-                Log.e("qq P-error", "" + t.message)
-            }
-
-            override fun onResponse(
-                call: Call<servayResponse>,
-                response: Response<servayResponse>
-            ) {
-                if (response.code() == 200) {
-                    if (response.isSuccessful) {
-                        Log.e("qq Data", "" + response.body()?.userSurveys?.get(0)?.assessmentTime)
-                       // bindingView.previousServayRecyclerview.adapter = ServayAdapter(response.body()!!.userSurveys,servayListener)
-
-
-                    } else {
-                        Log.e("qq error", "" + response.errorBody())
-                    }
-
-                } else {
-                    goToLginActivity()
-                }
-            }
-
-        })
-
-    }
 }
