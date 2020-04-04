@@ -8,9 +8,9 @@ import com.corona.awareness.adapters.QuestionAnswerAdapter
 import com.corona.awareness.databinding.ActivityFeelingSickBinding
 import com.corona.awareness.helper.kotlin.Constants
 import com.corona.awareness.helper.kotlin.Utils
-import com.corona.awareness.model.questions.get_questions.questionResponse
-import com.corona.awareness.model.questions.post_answers.request.postAnswerRequest
-import com.corona.awareness.model.questions.post_answers.response.postAnswerResponse
+import com.corona.awareness.model.questions.get_questions.QuestionResponseModel
+import com.corona.awareness.model.questions.post_answers.request.PostAnswerRequestModel
+import com.corona.awareness.model.questions.post_answers.response.PostAnswerResponseModel
 import com.corona.awareness.network.RetrofitConnection
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,9 +21,9 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
 
     private var questionId: Int = 0
     private var answerId: Int = 0
-    private var postAnswer: postAnswerRequest? = null
-    private var listOfQuestions: List<questionResponse.Qustion> = listOf()
-    val listofAnswers: MutableList<postAnswerRequest.Answer> = mutableListOf()
+    private var postAnswer: PostAnswerRequestModel? = null
+    private var listOfQuestions: List<QuestionResponseModel.Qustion> = listOf()
+    val listofAnswers: MutableList<PostAnswerRequestModel.Answer> = mutableListOf()
     private lateinit var answerAdapter: QuestionAnswerAdapter
     private lateinit var bindingView: ActivityFeelingSickBinding
 
@@ -81,14 +81,14 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
 
         val call = RetrofitConnection.getAPIClient(Awareness.loginData?.token!!)
             .sendQuestionAnswers("" + Awareness.loginData?.user?.id, getQuestionsAnswer())
-        call.enqueue(object : Callback<postAnswerResponse> {
-            override fun onFailure(call: Call<postAnswerResponse>, t: Throwable) {
+        call.enqueue(object : Callback<PostAnswerResponseModel> {
+            override fun onFailure(call: Call<PostAnswerResponseModel>, t: Throwable) {
                 progressBar.dialog.dismiss()
             }
 
             override fun onResponse(
-                call: Call<postAnswerResponse>,
-                response: Response<postAnswerResponse>
+                call: Call<PostAnswerResponseModel>,
+                response: Response<PostAnswerResponseModel>
             ) {
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
@@ -109,8 +109,8 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
         })
     }
 
-    private fun getQuestionsAnswer(): postAnswerRequest {
-        return postAnswerRequest(
+    private fun getQuestionsAnswer(): PostAnswerRequestModel {
+        return PostAnswerRequestModel(
             Constants.latitude,
             Constants.longitude,
             listofAnswers
@@ -121,14 +121,14 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
     fun addQuestions() {
 
         val call = RetrofitConnection.getAPIClient(Awareness.loginData!!.token).getAllQuestions()
-        call.enqueue(object : Callback<questionResponse> {
-            override fun onFailure(call: Call<questionResponse>, t: Throwable) {
+        call.enqueue(object : Callback<QuestionResponseModel> {
+            override fun onFailure(call: Call<QuestionResponseModel>, t: Throwable) {
 
             }
 
             override fun onResponse(
-                call: Call<questionResponse>,
-                response: Response<questionResponse>
+                call: Call<QuestionResponseModel>,
+                response: Response<QuestionResponseModel>
             ) {
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
@@ -150,7 +150,7 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
 
     }
 
-    private fun setAdapter(index: Int, listOfQuestions: List<questionResponse.Qustion>) {
+    private fun setAdapter(index: Int, listOfQuestions: List<QuestionResponseModel.Qustion>) {
         questionId = listOfQuestions.get(index).questionId
         if (listOfQuestions.get(index).question != null) {
             bindingView.tQuestion.text = listOfQuestions.get(index).question
@@ -171,13 +171,13 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
             for (answer in listofAnswers) {
                 if (answer.questionId == this.questionId && answer.answerId != answerId) {
                     Log.e("2-questionId,answerId ", "" + answerId + "," + this.questionId)
-                    listofAnswers.add(postAnswerRequest.Answer(answerId, this.questionId))
+                    listofAnswers.add(PostAnswerRequestModel.Answer(answerId, this.questionId))
                 }
             }
 
         } else {
             Log.e("1-questionId,answerId ", "" + answerId + "," + this.questionId)
-            listofAnswers.add(postAnswerRequest.Answer(answerId, this.questionId))
+            listofAnswers.add(PostAnswerRequestModel.Answer(answerId, this.questionId))
         }
 
     }

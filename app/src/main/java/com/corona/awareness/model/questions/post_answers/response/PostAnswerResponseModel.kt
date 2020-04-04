@@ -1,5 +1,5 @@
 package com.corona.awareness.model.questions.post_answers.response
 
-data class postAnswerResponse(
+data class PostAnswerResponseModel(
     val success: Boolean
 )

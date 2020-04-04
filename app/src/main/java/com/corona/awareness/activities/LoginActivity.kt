@@ -1,5 +1,6 @@
 package com.corona.awareness.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,24 +8,28 @@ import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityLoginBinding
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.helper.kotlin.CustomProgressBar
-import com.corona.awareness.helper.kotlin.Utils
-import com.corona.awareness.model.login.loginRequest
-import com.corona.awareness.model.login.loginResponse
+import com.corona.awareness.model.login.LoginRequestModel
+import com.corona.awareness.model.login.LoginResponseModel
 import com.corona.awareness.network.RetrofitConnection
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : BaseActivity() {
 
-    private var progressBar: CustomProgressBar? = null
+    private var progressDialog: ProgressDialog? = null
     private lateinit var bindingView: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_login)
         AppSharedPreferences.init(this)
         setupUI()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        resetProgressDialog()
     }
 
     private fun setupUI() {
@@ -38,59 +43,68 @@ class LoginActivity : BaseActivity() {
 
     private fun goToSignUpActivity() {
         val intent = Intent(this, SignUpActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, SIGN_UP_REQUEST_CODE)
     }
 
     private fun performAuth() {
-        val userPhone = bindingView.userPhone.text.toString();
-        val userPassword = bindingView.password.text.toString();
-
-        //  if (isAuthenticate(userPhone, userPassword)) {
-        val loginData = getloginData()
+        val loginData = getLoginData()
         val validateResult = validateData(loginData)
         if (validateResult == ValidationResult.VALID) {
-            progressBar = Utils.openProgressDialog(this)
+            progressDialog = ProgressDialog.show(this, "", "Please wait", true)
             loginUser(loginData)
         } else {
             showError(validateResult)
         }
-
-//        } else {
-////            bindingView.invalidAuthText.text = "invalid login"
-////            bindingView.invalidAuthText.visibility = View.VISIBLE
-//        }
     }
 
-    private fun isAuthenticate(phoneNumber: String, password: String): Boolean {
-        val user = AppSharedPreferences.getUser()
-        return phoneNumber == user.phoneNumber
-                && password == user.password
-    }
-
-
-    private fun getloginData(): loginRequest {
+    private fun getLoginData(): LoginRequestModel {
         val userPhoneNumber = bindingView.userPhone.text.toString()
         val userPassword = bindingView.password.text.toString()
 
-        return loginRequest(
+        return LoginRequestModel(
             userPhoneNumber,
             userPassword
         )
     }
 
-    private fun loginUser(loginRequest: loginRequest) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SIGN_UP_REQUEST_CODE && resultCode == SIGN_UP_RESULT_CODE) {
+            Snackbar.make(
+                bindingView.container,
+                "Account created successfully",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun resetProgressDialog() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
+
+    private fun loginUser(loginRequest: LoginRequestModel) {
+
+        fun onLoginFailure() {
+            Snackbar.make(
+                bindingView.container,
+                "Failed to login, please again",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
 
         val call = RetrofitConnection.getAPIClient("").loginUser(loginRequest)
-        call.enqueue(object : Callback<loginResponse> {
-            override fun onFailure(call: Call<loginResponse>, t: Throwable) {
-                progressBar?.dialog?.dismiss()
+        call.enqueue(object : Callback<LoginResponseModel> {
+            override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
+                onLoginFailure()
+                resetProgressDialog()
             }
 
-            override fun onResponse(call: Call<loginResponse>, response: Response<loginResponse>) {
+            override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
+                resetProgressDialog()
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
-                            progressBar?.dialog?.dismiss()
                             val loginResponse = response.body()
                             if (loginResponse?.success!!) {
                                 AppSharedPreferences.put(loginResponse, Constants.LOGIN_OBJECT)
@@ -111,7 +125,7 @@ class LoginActivity : BaseActivity() {
     }
 
 
-    private fun validateData(data: loginRequest): ValidationResult {
+    private fun validateData(data: LoginRequestModel): ValidationResult {
         return when {
             data.userPhoneNumber.isBlank() -> ValidationResult.INVALID_PHONE
             data.userPassword.isBlank() -> ValidationResult.INVALID_PASSWORD
@@ -143,5 +157,8 @@ class LoginActivity : BaseActivity() {
         INVALID_PASSWORD
     }
 
-
+    companion object {
+        const val SIGN_UP_REQUEST_CODE = 99
+        const val SIGN_UP_RESULT_CODE = 199
+    }
 }

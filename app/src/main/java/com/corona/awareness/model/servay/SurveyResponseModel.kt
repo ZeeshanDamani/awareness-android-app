@@ -1,6 +1,6 @@
 package com.corona.awareness.model.servay
 
-data class servayResponse(
+data class SurveyResponseModel(
     val userSurveys: List<UserSurvey>
 ) {
     data class UserSurvey(

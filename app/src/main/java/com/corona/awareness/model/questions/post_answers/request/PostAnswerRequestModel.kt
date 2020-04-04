@@ -1,6 +1,6 @@
 package com.corona.awareness.model.questions.post_answers.request
 
-data class postAnswerRequest(
+data class PostAnswerRequestModel(
     var latitude: String,
     var longitude:String,
     var answers: MutableList<Answer>

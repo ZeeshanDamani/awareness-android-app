@@ -1,6 +1,6 @@
 package com.corona.awareness.model.profile
 
-data class profileResponse(
+data class ProfileResponseModel(
     val message: String,
     val responseCode: Int,
     val success: Boolean,

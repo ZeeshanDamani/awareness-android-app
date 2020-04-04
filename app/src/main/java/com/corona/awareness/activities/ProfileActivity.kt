@@ -2,36 +2,48 @@ package com.corona.awareness.activities
 
 import android.content.Intent
 import android.os.Bundle
-import com.corona.awareness.Awareness
+import android.view.View
 import com.corona.awareness.R
-import com.corona.awareness.adapters.ServayAdapter
+import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityProfileBinding
-import com.corona.awareness.model.servay.servayResponse
+import com.corona.awareness.helper.kotlin.Constants
+import com.corona.awareness.model.login.LoginResponseModel
 
-class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
-
-    private lateinit var servayViewAdapter: ServayAdapter
-    private lateinit var servayListener: ServayAdapter.ViewHolder.servayListener
+class ProfileActivity : BaseActivity() {
     private lateinit var bindingView: ActivityProfileBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContentView(R.layout.activity_profile)
         bindingView = setContentViewDataBinding(R.layout.activity_profile)
-        setTitle("Profile")
-        servayListener = this
         setUpToolBar()
+    }
+
+    override fun onResume() {
+        super.onResume()
         setupUI()
     }
 
     private fun setupUI() {
+        val loginResponseModel: LoginResponseModel? =
+            AppSharedPreferences.get(Constants.LOGIN_OBJECT)
+        loginResponseModel?.let {
+            bindingView.tFirstName.text = it.user.firstName
+            bindingView.tPhone.text = it.user.phoneNumber
 
-        //  val name: List<String> = Awareness.loginData?.user?.username.toString().split(" ")
+            val email = it.user.email
+            if (email.isNullOrBlank()) {
+                bindingView.tEmail.visibility = View.GONE
+            } else {
+                bindingView.tEmail.text = email
+            }
 
-        bindingView.tFirstName.setText("" + Awareness.loginData?.user?.firstName)
-        bindingView.tPhone.setText("" + Awareness.loginData?.user?.phoneNumber)
-        bindingView.tEmail.setText("" + Awareness.loginData?.user?.email)
-        bindingView.tCnic.setText("" + Awareness.loginData?.user?.cnic)
+            val cnic = it.user.cnic
+            if (cnic.isNullOrBlank()) {
+                bindingView.tCnic.visibility = View.GONE
+            } else {
+                bindingView.tCnic.text = cnic
+            }
+        }
 
         bindingView.btEditProfile.setOnClickListener {
             startActivity(Intent(this, ProfileEditActivity::class.java))
@@ -54,10 +66,4 @@ class ProfileActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
         onBackPressed()
         return true
     }
-
-    override fun onClick(servayResponse: servayResponse.UserSurvey) {
-
-    }
-
-
 }

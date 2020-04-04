@@ -1,6 +1,6 @@
 package com.corona.awareness.model.questions.get_questions
 
-data class questionResponse(
+data class QuestionResponseModel(
     val qustions: List<Qustion>
 ) {
     data class Qustion(

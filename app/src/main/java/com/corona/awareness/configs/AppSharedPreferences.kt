@@ -2,9 +2,9 @@ package com.corona.awareness.configs
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.corona.awareness.model.User
-import com.corona.awareness.model.signup.signupRequest
+import com.corona.awareness.model.signup.SignUpRequestModel
 import com.google.gson.GsonBuilder
+import java.lang.reflect.Type
 
 object AppSharedPreferences {
 
@@ -36,7 +36,16 @@ object AppSharedPreferences {
         return GsonBuilder().create().fromJson(value, T::class.java)
     }
 
-    fun saveUser(user: signupRequest) {
+    inline fun <reified T> get(key: String, type: Type): T? {
+        //We read JSON String which was saved.
+        val value = sharedPreferences?.getString(key, null)
+        //JSON String was found which means object can be read.
+        //We convert this JSON String to model object. Parameter "c" (of
+        //type “T” is used to cast.
+        return GsonBuilder().create().fromJson(value, type)
+    }
+
+    fun saveUser(user: SignUpRequestModel) {
         val editor: SharedPreferences.Editor = sharedPreferences!!.edit()
         editor.putString(FIRST_NAME, user.fullName)
         //editor.putString(LAST_NAME, user.lastName)
@@ -47,26 +56,6 @@ object AppSharedPreferences {
         //editor.putString(DOB, user.dateOfBirth)
         editor.apply()
         editor.commit()
-    }
-
-    fun getUser(): User {
-        val firstName = sharedPreferences?.getString(FIRST_NAME, "")
-        val lastName = sharedPreferences?.getString(LAST_NAME, "")
-        val phoneNumber = sharedPreferences?.getString(PHONE_NUMBER, "")
-        val cnic = sharedPreferences?.getString(CNIC, "")
-        val password = sharedPreferences?.getString(PASSWORD, "")
-        val email = sharedPreferences?.getString(EMAIL, "")
-        val dateOfBirth = sharedPreferences?.getString(DOB, "")
-
-        return User(
-            firstName!!,
-            lastName!!,
-            phoneNumber!!,
-            cnic!!,
-            password!!,
-            email!!,
-            dateOfBirth!!
-        )
     }
 
     private const val FIRST_NAME: String = "firstName"

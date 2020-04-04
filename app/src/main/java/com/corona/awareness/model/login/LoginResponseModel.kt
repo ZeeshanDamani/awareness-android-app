@@ -1,6 +1,6 @@
 package com.corona.awareness.model.login
 
-data class loginResponse(
+data class LoginResponseModel(
     val accessLevel: Int,
     val message: String,
     val success: Boolean,
@@ -11,17 +11,17 @@ data class loginResponse(
         val accountNonExpired: Boolean,
         val accountNonLocked: Boolean,
         val authorities: List<String>,
-        val cityId: Any?,
-        val cnic: Any?,
+        val cityId: Int?,
+        val cnic: String?,
         val countryId: Any?,
         val createdDate: String,
         val credentialsNonExpired: Boolean,
-        val dateOfBirth: Any?,
-        val email: Any?,
+        val dateOfBirth: String?,
+        val email: String?,
         val enabled: Boolean,
         val expired: Boolean,
         val firstName: String,
-        val gender: Any?,
+        val gender: String?,
         val id: Int,
         val locked: Boolean,
         val new: Boolean,
@@ -30,6 +30,7 @@ data class loginResponse(
         val trackingAllowed: Boolean,
         val updatedDate: String,
         val user_type: Any?,
-        val username: Any?
+        val username: Any?,
+        val profileCompleted: Boolean
     )
 }

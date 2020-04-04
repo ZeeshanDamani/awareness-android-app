@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.corona.awareness.R
-import com.corona.awareness.model.servay.servayResponse
+import com.corona.awareness.model.servay.SurveyResponseModel
 import kotlinx.android.synthetic.main.servay_item_row.view.*
 
-class ServayAdapter(private val servayList: List<servayResponse.UserSurvey> = mutableListOf(),
+class ServayAdapter(private val servayList: List<SurveyResponseModel.UserSurvey> = mutableListOf(),
                     private val servayListener: ViewHolder.servayListener):
         RecyclerView.Adapter<ServayAdapter.ViewHolder>(){
 
@@ -48,7 +48,7 @@ class ServayAdapter(private val servayList: List<servayResponse.UserSurvey> = mu
         val t_condition = itemView.t_condition
 
         interface servayListener{
-            fun onClick(servayResponse: servayResponse.UserSurvey)
+            fun onClick(servayResponse: SurveyResponseModel.UserSurvey)
         }
     }
 

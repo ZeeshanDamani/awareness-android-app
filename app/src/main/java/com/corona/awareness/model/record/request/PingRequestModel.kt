@@ -1,6 +1,6 @@
 package com.corona.awareness.model.record.request
 
-data class recordRequest(
+data class PingRequestModel(
     val createdAt: String,
     val device: String,
     val latitude: String,

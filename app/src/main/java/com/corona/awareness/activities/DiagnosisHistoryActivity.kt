@@ -6,7 +6,7 @@ import com.corona.awareness.Awareness
 import com.corona.awareness.R
 import com.corona.awareness.adapters.ServayAdapter
 import com.corona.awareness.databinding.ActivityDiagnosisHistoryBinding
-import com.corona.awareness.model.servay.servayResponse
+import com.corona.awareness.model.servay.SurveyResponseModel
 import com.corona.awareness.network.RetrofitConnection
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,16 +34,16 @@ class DiagnosisHistoryActivity : BaseActivity() ,ServayAdapter.ViewHolder.servay
 
         val call =
             RetrofitConnection.getAPIClient(Awareness?.loginData?.token!!)
-                .getAllUserServeys(""+ Awareness.loginData?.user?.id)
+                .getUserSurveys(""+ Awareness.loginData?.user?.id)
 
-        call.enqueue(object : Callback<servayResponse> {
-            override fun onFailure(call: Call<servayResponse>, t: Throwable) {
+        call.enqueue(object : Callback<SurveyResponseModel> {
+            override fun onFailure(call: Call<SurveyResponseModel>, t: Throwable) {
                 Log.e("qq P-error", "" + t.message)
             }
 
             override fun onResponse(
-                call: Call<servayResponse>,
-                response: Response<servayResponse>
+                call: Call<SurveyResponseModel>,
+                response: Response<SurveyResponseModel>
             ) {
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
@@ -64,7 +64,7 @@ class DiagnosisHistoryActivity : BaseActivity() ,ServayAdapter.ViewHolder.servay
 
     }
 
-    override fun onClick(servayResponse: servayResponse.UserSurvey) {
+    override fun onClick(servayResponse: SurveyResponseModel.UserSurvey) {
 
     }
 }

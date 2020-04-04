@@ -3,39 +3,33 @@ package com.corona.awareness
 import android.app.Application
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.login.loginResponse
+import com.corona.awareness.model.login.LoginResponseModel
 
-class Awareness : Application(){
+class Awareness : Application() {
 
     companion object {
 
         @JvmField
         var appInstance: Awareness? = null
         @JvmField
-        var loginData: loginResponse? = null
+        var loginData: LoginResponseModel? = null
 
-
-
-        @JvmStatic fun getAppInstance(): Awareness {
+        @JvmStatic
+        fun getAppInstance(): Awareness {
             return appInstance as Awareness
         }
 
-        @JvmStatic fun getLoginData(): loginResponse? {
+        @JvmStatic
+        fun getLoginData(): LoginResponseModel? {
             loginData = AppSharedPreferences.get(Constants.LOGIN_OBJECT)
-            if(loginData != null){
-                return loginData as loginResponse
-            }
-            return null
+            return loginData
         }
-
-
     }
 
     override fun onCreate() {
         super.onCreate()
-
-        appInstance = this;
-
+        appInstance = this
+        AppSharedPreferences.init(this)
     }
 
 }

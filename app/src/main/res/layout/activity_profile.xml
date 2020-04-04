@@ -25,26 +25,6 @@
             android:padding="16dp"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/initial_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_ellipse_3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/initials"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ZD"
-                android:textColor="@android:color/white"
-                android:textSize="40sp"
-                app:layout_constraintBottom_toBottomOf="@+id/initial_bg"
-                app:layout_constraintEnd_toEndOf="@+id/initial_bg"
-                app:layout_constraintStart_toStartOf="@+id/initial_bg"
-                app:layout_constraintTop_toTopOf="@+id/initial_bg" />
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tFirstName"
                 android:layout_width="match_parent"
@@ -52,10 +32,10 @@
                 android:layout_marginTop="16dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="Zeeshan Damani"
+                tools:text="Zeeshan Damani"
                 android:textColor="#003044"
                 android:textSize="40sp"
-                app:layout_constraintTop_toBottomOf="@+id/initial_bg" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tCnic"
@@ -74,9 +54,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
+                app:layout_goneMarginTop="8dp"
                 android:letterSpacing="0.01"
                 android:singleLine="true"
-                android:text="+923121234567"
+                tools:text="+923121234567"
                 android:textColor="#69767B"
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/tCnic" />

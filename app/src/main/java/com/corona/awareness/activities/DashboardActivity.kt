@@ -23,9 +23,9 @@ import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityDashboardBinding
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.login.loginResponse
-import com.corona.awareness.model.record.request.recordRequest
-import com.corona.awareness.model.record.response.recordResponse
+import com.corona.awareness.model.login.LoginResponseModel
+import com.corona.awareness.model.record.request.PingRequestModel
+import com.corona.awareness.model.record.response.PingResponseModel
 import com.corona.awareness.network.RetrofitConnection
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -42,8 +42,8 @@ class DashboardActivity : BaseActivity(), LocationListener,
 
     public var latitude: String? = null
     public var longitude: String? = null
-    private var login: loginResponse? = null
-    private lateinit var loginData: loginResponse
+    private var login: LoginResponseModel? = null
+    private lateinit var loginData: LoginResponseModel
     private lateinit var mLocationManager: LocationManager
     val PERMISSION_ID = 42
     private lateinit var bindingView: ActivityDashboardBinding
@@ -53,7 +53,7 @@ class DashboardActivity : BaseActivity(), LocationListener,
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_dashboard)
         setUpToolBar()
-        login = AppSharedPreferences.get<loginResponse>(Constants.LOGIN_OBJECT)
+        login = AppSharedPreferences.get<LoginResponseModel>(Constants.LOGIN_OBJECT)
         if (login?.success!!) {
             Awareness.loginData = login
             Log.e("qq user -", "" + login?.token)
@@ -187,14 +187,14 @@ class DashboardActivity : BaseActivity(), LocationListener,
     private fun pingUserLocation(latitude: String, longitude: String) {
         val call = RetrofitConnection.getAPIClient(login?.token!!)
             .sendUserPings("" + login?.user?.id, setRecordRequest(latitude, longitude))
-        call.enqueue(object : Callback<recordResponse> {
-            override fun onFailure(call: Call<recordResponse>, t: Throwable) {
+        call.enqueue(object : Callback<PingResponseModel> {
+            override fun onFailure(call: Call<PingResponseModel>, t: Throwable) {
                 Log.e("DSG ", "" + t.message)
             }
 
             override fun onResponse(
-                call: Call<recordResponse>,
-                response: Response<recordResponse>
+                call: Call<PingResponseModel>,
+                response: Response<PingResponseModel>
             ) {
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
@@ -213,8 +213,8 @@ class DashboardActivity : BaseActivity(), LocationListener,
 
     }
 
-    private fun setRecordRequest(latitude: String, longitude: String): recordRequest {
-        return recordRequest("1584960348", "ANDROID", latitude, longitude, login?.user?.id!!)
+    private fun setRecordRequest(latitude: String, longitude: String): PingRequestModel {
+        return PingRequestModel("1584960348", "ANDROID", latitude, longitude, login?.user?.id!!)
     }
 
 

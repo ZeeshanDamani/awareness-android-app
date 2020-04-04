@@ -1,16 +1,17 @@
 package com.corona.awareness.activities
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.widget.Toolbar
 import com.corona.awareness.R
+import com.corona.awareness.activities.LoginActivity.Companion.SIGN_UP_RESULT_CODE
 import com.corona.awareness.activities.SignUpActivity.ValidationResult.*
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivitySignupBinding
-import com.corona.awareness.model.User
-import com.corona.awareness.model.signup.signupRequest
-import com.corona.awareness.model.signup.signupResponse
+import com.corona.awareness.model.signup.SignUpRequestModel
+import com.corona.awareness.model.signup.SignUpResponseModel
 import com.corona.awareness.network.RetrofitConnection
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,12 +20,18 @@ import retrofit2.Response
 class SignUpActivity : BaseActivity() {
 
     private lateinit var bindingView: ActivitySignupBinding
+    private var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_signup)
         setUpToolBar()
         setupUI()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        resetProgressDialog()
     }
 
     private fun setUpToolBar() {
@@ -42,28 +49,6 @@ class SignUpActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-//        bindingView.dateOfBirth.apply {
-//
-//            fun setDate(year: Int, month: Int, day: Int) {
-//                setText("$day/$month/$year")
-//            }
-//
-//            setOnClickListener {
-//
-//                val calendar = Calendar.getInstance()
-//                val currentYear = calendar.get(Calendar.YEAR) // current year
-//                val currentMonth = calendar.get(Calendar.MONTH) // current month
-//                val currentDay = calendar.get(Calendar.DAY_OF_MONTH) // current day
-//
-//                DatePickerDialog(
-//                    this@SignUpActivity,
-//                    DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-//                        setDate(year, month, dayOfMonth)
-//                    }, currentYear, currentMonth, currentDay
-//                ).show()
-//            }
-//        }
-
         bindingView.signUpBtn.setOnClickListener {
             validateAndSignUp()
         }
@@ -73,9 +58,7 @@ class SignUpActivity : BaseActivity() {
         val data = getSignUpData()
         val validationResult = validateData(data)
         if (validationResult == VALID) {
-//            signupUser(data.userPhoneNumber,data.firstName,data.lastName,data.userEmail,
-//                       data.userPassword,data.dateOfBirth,1,1,data.cnic,"USER")
-            signupUser(data)
+            signUpUser(data)
         } else {
             showError(validationResult)
         }
@@ -84,154 +67,112 @@ class SignUpActivity : BaseActivity() {
     private fun showError(result: ValidationResult) {
         fun resetError() {
             bindingView.fullName.error = null
-          //  bindingView.lastName.error = null
             bindingView.phoneNumber.error = null
             bindingView.password.error = null
             bindingView.passwordConfirmation.error = null
-         //   bindingView.email.error = null
-         //   bindingView.dateOfBirth.error = null
         }
 
         resetError()
 
         when (result) {
-            INVALID_FIRST_NAME -> bindingView.fullName.error = "Enter full name"
-           // INVALID_LAST_NAME -> bindingView.lastName.error = "Enter last name"
+            INVALID_NAME -> bindingView.fullName.error = "Enter full name"
             INVALID_PHONE -> bindingView.phoneNumber.error = "Enter phone number"
             INVALID_PASSWORD -> bindingView.password.error = "Enter a password"
-           // INVALID_EMAIL -> bindingView.email.error = "Invalid email"
             PASSWORD_MISS_MATCH -> bindingView.passwordConfirmation.error = "Password miss match"
-           // INVALID_DOB -> bindingView.dateOfBirth.error = "Select a date"
             else -> {}
         }
     }
 
-    private fun getSignUpData(): signupRequest {
+    private fun getSignUpData(): SignUpData {
         val phoneNumber = bindingView.phoneNumber.text.toString()
-        val firstName = bindingView.fullName.text.toString()
-       // val lastName = bindingView.lastName.text.toString()
-       // val cnic = bindingView.cnic.text.toString()
+        val fullName = bindingView.fullName.text.toString()
         val password = bindingView.password.text.toString()
-       /// val email = bindingView.email.text.toString()
-       // val dateOfBirth = bindingView.dateOfBirth.text.toString()
-
-        return signupRequest(
-            phoneNumber,
-            firstName,
-            password,
-            1,
-            1,
-            "USER"
-        )
+        val passwordConfirmation = bindingView.passwordConfirmation.text.toString()
+        return SignUpData(fullName, phoneNumber, password, passwordConfirmation)
     }
 
-    private fun validateData(data: signupRequest): ValidationResult {
+    private fun validateData(data: SignUpData): ValidationResult {
         return when {
-            data.fullName.isBlank() -> INVALID_FIRST_NAME
-          //  data.lastName.isBlank() -> INVALID_LAST_NAME
-            data.userPhoneNumber.isBlank() -> INVALID_PHONE
-            data.userPassword.isBlank() -> INVALID_PASSWORD
-            !data.userPassword.contentEquals(bindingView.passwordConfirmation.text.toString()) -> PASSWORD_MISS_MATCH
-         //   Patterns.EMAIL_ADDRESS.toRegex().matches(data.userEmail) -> INVALID_EMAIL
-          //  data.dateOfBirth.isBlank() -> INVALID_DOB
+            data.fullName.isBlank() -> INVALID_NAME
+            data.phoneNumber.isBlank() -> INVALID_PHONE
+            data.password.isBlank() -> INVALID_PASSWORD
+            !matchesPassword(data.password, data.passwordConfirmation) -> PASSWORD_MISS_MATCH
             else -> VALID
         }
     }
 
+    private fun matchesPassword(password: String, passwordConfirmation: String): Boolean {
+        return password == passwordConfirmation
+    }
+
     private data class SignUpData(
-        val firstName: String,
-        val lastName: String,
+        val fullName: String,
         val phoneNumber: String,
-        val cnic: String,
         val password: String,
-        val passwordConfirmation: String,
-        val email: String,
-        val dateOfBirth: String
+        val passwordConfirmation: String
     )
 
-    private fun SignUpData.toUser(): User {
-        return User(
-            firstName,
-            lastName,
-            phoneNumber,
-            cnic,
-            password,
-            email,
-            dateOfBirth
-        )
+    private fun SignUpData.toSignUpRequestModel(): SignUpRequestModel {
+        return SignUpRequestModel(phoneNumber, fullName, password)
     }
 
     private enum class ValidationResult {
         VALID,
-        INVALID_FIRST_NAME,
-        INVALID_LAST_NAME,
+        INVALID_NAME,
         INVALID_PHONE,
         INVALID_PASSWORD,
-        INVALID_EMAIL,
         PASSWORD_MISS_MATCH,
-        INVALID_DOB
     }
 
-    private fun signupUser(signupRequest: signupRequest) {
+    private fun resetProgressDialog() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
 
-        var call = RetrofitConnection.getAPIClient("").signupUser(signupRequest)
+    private fun signUpUser(data: SignUpData) {
 
-        call.enqueue(object : Callback<signupResponse>{
-            override fun onFailure(call: Call<signupResponse>, t: Throwable) {
-                Log.e("signupW Error" ,""+t.message)
+        fun onSignUpFailure() {
+            Snackbar.make(
+                bindingView.container,
+                "Failed to create the account, please again",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+
+        val requestModel = data.toSignUpRequestModel()
+        progressDialog = ProgressDialog.show(this, "", "Creating account please wait", true)
+        val call = RetrofitConnection.getAPIClient("").signUpUser(requestModel)
+
+        call.enqueue(object : Callback<SignUpResponseModel> {
+            override fun onFailure(call: Call<SignUpResponseModel>, t: Throwable) {
+                resetProgressDialog()
+                onSignUpFailure()
+                Log.e("signupW Error", "" + t.message)
             }
 
             override fun onResponse(
-                call: Call<signupResponse>,
-                response: Response<signupResponse>
+                call: Call<SignUpResponseModel>,
+                response: Response<SignUpResponseModel>
             ) {
-                if(response.isSuccessful){
-                    val signupResponse = response.body()
+                resetProgressDialog()
+                if (response.isSuccessful) {
+                    val responseData = response.body()
 
-                        AppSharedPreferences.saveUser(signupRequest)
-                        finish()
+                    AppSharedPreferences.saveUser(requestModel)
+                    Log.e("qq", "" + responseData?.success)
+                    Log.e("qq", "" + responseData?.responseCode)
+                    Log.e("qq", "" + responseData?.message)
 
-                    Log.e("qq" ,""+signupResponse?.success)
-                    Log.e("qq" ,""+signupResponse?.responseCode)
-                    Log.e("qq" ,""+signupResponse?.message)
-                }else{
-                    Log.e("qq->" ,""+response.errorBody())
+                    setResult(SIGN_UP_RESULT_CODE)
+                    finish()
+                } else {
+                    onSignUpFailure()
+                    Log.e("qq->", "" + response.errorBody())
                 }
             }
-
         })
 
-
-        // var gson = Gson()
-        //retrofit call with courotines
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val response = RetrofitConnection.getAPIClient("").signupUser(phone,firstName,lastName,userEmail,userPassword,
-//                                                                        dateOfBirth,cityId,countryId,cnic,accessType)
-//            withContext(Dispatchers.Main){
-//                try {
-//                    if (response.isSuccessful) {
-//
-//                        Log.e("signupResponse - ", ""+response.code())
-//
-//                        AppSharedPreferences.saveUser(signupRequest)
-//                        finish()
-//
-//                        //Do something with response e.g show to the UI.
-//                    } else {
-//                        print("Error: ${response.code()}")
-//                    }
-//                } catch (e: HttpException) {
-//                    print("Exception ${e.message}")
-//                    //toast()
-//                } catch (e: Throwable) {
-//                    print("Ooops: Something else went wrong")
-//                }
-//            }
-//
-//        }
-
     }
-
 
 
 }

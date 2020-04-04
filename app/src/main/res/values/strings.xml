@@ -43,7 +43,7 @@
     <string name="label_contact_detail">CONTACT DETAILS</string>
     <string name="label_new_password">New password</string>
     <string name="label_old_password">Old password</string>
-    <string name="label_email">Email (optional)</string>
+    <string name="label_email">Email</string>
     <string name="label_update_detail">Update details</string>
     <string name="label_personal_detail">PERSONAL DETAILS</string>
     <string name="label_required_for_diagonsis">Requried for diagnosis</string>
@@ -52,5 +52,11 @@
     <string name="label_city">CIty</string>
     <string name="label_diagonose_history">Diagnosis \nhistory</string>
     <string name="label_date_of_birth">Date of birth</string>
+
+    <string-array name="genders">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 
 </resources>

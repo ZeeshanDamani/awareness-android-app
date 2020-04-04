@@ -1,63 +1,53 @@
 package com.corona.awareness.network
 
-import com.corona.awareness.model.login.loginRequest
-import com.corona.awareness.model.login.loginResponse
-import com.corona.awareness.model.profile.profileRequest
-import com.corona.awareness.model.profile.profileResponse
-import com.corona.awareness.model.questions.get_questions.questionResponse
-import com.corona.awareness.model.questions.post_answers.request.postAnswerRequest
-import com.corona.awareness.model.questions.post_answers.response.postAnswerResponse
-import com.corona.awareness.model.record.request.recordRequest
-import com.corona.awareness.model.record.response.recordResponse
-import com.corona.awareness.model.servay.servayResponse
-import com.corona.awareness.model.signup.signupRequest
-import com.corona.awareness.model.signup.signupResponse
+import com.corona.awareness.model.City
+import com.corona.awareness.model.login.LoginRequestModel
+import com.corona.awareness.model.login.LoginResponseModel
+import com.corona.awareness.model.profile.ProfileRequestModel
+import com.corona.awareness.model.questions.get_questions.QuestionResponseModel
+import com.corona.awareness.model.questions.post_answers.request.PostAnswerRequestModel
+import com.corona.awareness.model.questions.post_answers.response.PostAnswerResponseModel
+import com.corona.awareness.model.record.request.PingRequestModel
+import com.corona.awareness.model.record.response.PingResponseModel
+import com.corona.awareness.model.servay.SurveyResponseModel
+import com.corona.awareness.model.signup.SignUpRequestModel
+import com.corona.awareness.model.signup.SignUpResponseModel
 import retrofit2.Call
 import retrofit2.http.*
 
 
 interface APIInterface {
 
-
     @POST("users/signup")
-    fun signupUser(@Body signupRequest: signupRequest): Call<signupResponse>
+    fun signUpUser(@Body signUpRequestModel: SignUpRequestModel): Call<SignUpResponseModel>
 
 
     @POST("users/login")
-    fun loginUser(@Body loginRequest: loginRequest): Call<loginResponse>
+    fun loginUser(@Body loginRequest: LoginRequestModel): Call<LoginResponseModel>
 
     @PUT("users/{id}")
-    fun profileEdit(@Path("id") userId: String,@Body profileRequest: profileRequest): Call<profileResponse>
-
+    fun profileEdit(
+        @Path("id") userId: String, @Body profileRequest: ProfileRequestModel
+    ): Call<LoginResponseModel.User>
 
     @GET("questionnaire/questions")
-    fun  getAllQuestions(): Call<questionResponse>
+    fun getAllQuestions(): Call<QuestionResponseModel>
 
     @GET("questionnaire/surveys/{id}")
-    fun getAllUserServeys(@Path("id") userId : String): Call<servayResponse>
+    fun getUserSurveys(@Path("id") userId: String): Call<SurveyResponseModel>
+
+    @GET("city")
+    fun getCities(): Call<List<City>>
 
 
     @POST("questionnaire/response/{id}")
-    fun sendQuestionAnswers(@Path("id") userId : String,
-                            @Body postAnswerRequestItem: postAnswerRequest) : Call<postAnswerResponse>
+    fun sendQuestionAnswers(
+        @Path("id") userId: String,
+        @Body postAnswerRequestItem: PostAnswerRequestModel
+    ): Call<PostAnswerResponseModel>
 
     @POST("pings/{id}/record")
-    fun sendUserPings(@Path(value="id", encoded=true) id : String, @Body recordRequest: recordRequest): Call<recordResponse>
-
-
-    //old working style
-
-    //    @FormUrlEncoded
-//    @POST("api/v1/user/signup")
-//     fun signupUser(@Field("userPhoneNumber")phone: String,
-//                           @Field("firstName") firstName: String,
-//                           @Field("lastName") lastName: String,
-//                           @Field("userEmail") userEmail: String,
-//                           @Field("userPassword") userPassword: String,
-//                           @Field("dateOfBirth") dateOdBirth: String,
-//                           @Field("cityId") cityId: Int,
-//                           @Field("countryId") countryId: Int,
-//                           @Field("cnic") cnic: String,
-//                           @Field("accessType") accessType: String): Call<signupResponse>
-
+    fun sendUserPings(
+        @Path(value = "id", encoded = true) id: String, @Body recordRequest: PingRequestModel
+    ): Call<PingResponseModel>
 }
