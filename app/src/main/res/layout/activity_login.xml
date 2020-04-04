@@ -11,6 +11,16 @@
         android:padding="16dp"
         tools:context=".activities.LoginActivity">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_login_logo"
+            android:layout_marginBottom="56dp"
+            app:layout_constraintBottom_toTopOf="@+id/label_phone_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_phone_number"
             style="@style/FormLabel"

@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import com.corona.awareness.Awareness
 import com.corona.awareness.R
-import com.corona.awareness.adapters.ServayAdapter
+import com.corona.awareness.adapters.SurveyAdapter
 import com.corona.awareness.databinding.ActivityDiagnosisHistoryBinding
 import com.corona.awareness.model.servay.SurveyResponseModel
 import com.corona.awareness.network.RetrofitConnection
@@ -12,25 +12,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DiagnosisHistoryActivity : BaseActivity() ,ServayAdapter.ViewHolder.servayListener{
+class DiagnosisHistoryActivity : BaseActivity() {
 
-    private lateinit var servayViewAdapter: ServayAdapter
+    private lateinit var servayViewAdapter: SurveyAdapter
     private lateinit var bindingView: ActivityDiagnosisHistoryBinding
-    private lateinit var servayListener: ServayAdapter.ViewHolder.servayListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_diagnosis_history)
         bindingView = setContentViewDataBinding(R.layout.activity_diagnosis_history)
         setTitle("Profile")
-        servayListener = this
 
-        setupServeys()
+        setupSurveys()
     }
 
 
 
-    private fun setupServeys() {
+    private fun setupSurveys() {
 
         val call =
             RetrofitConnection.getAPIClient(Awareness?.loginData?.token!!)
@@ -47,10 +45,7 @@ class DiagnosisHistoryActivity : BaseActivity() ,ServayAdapter.ViewHolder.servay
             ) {
                 if (response.code() == 200) {
                     if (response.isSuccessful) {
-                        //Log.e("qq Data", "" + response.body()?.userSurveys?.get(0)?.assessmentTime)
-                         bindingView.previousServayRecyclerview.adapter = ServayAdapter(response.body()!!.userSurveys,servayListener)
-
-
+                         bindingView.previousServayRecyclerview.adapter = SurveyAdapter(response.body()!!.userSurveys)
                     } else {
                         Log.e("qq error", "" + response.errorBody())
                     }
@@ -61,10 +56,6 @@ class DiagnosisHistoryActivity : BaseActivity() ,ServayAdapter.ViewHolder.servay
             }
 
         })
-
-    }
-
-    override fun onClick(servayResponse: SurveyResponseModel.UserSurvey) {
 
     }
 }
