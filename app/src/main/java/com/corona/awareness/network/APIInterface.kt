@@ -1,6 +1,7 @@
 package com.corona.awareness.network
 
 import com.corona.awareness.model.City
+import com.corona.awareness.model.PasswordUpdaterRequestModel
 import com.corona.awareness.model.login.LoginRequestModel
 import com.corona.awareness.model.login.LoginResponseModel
 import com.corona.awareness.model.profile.ProfileRequestModel
@@ -29,6 +30,10 @@ interface APIInterface {
     fun profileEdit(
         @Path("id") userId: String, @Body profileRequest: ProfileRequestModel
     ): Call<LoginResponseModel.User>
+
+        @POST("password/{userId}")
+    fun updatePassword(@Path("userId") userId: String,
+                       @Body passwordUpdaterRequestModel: PasswordUpdaterRequestModel): Call<Void>
 
     @GET("questionnaire/questions")
     fun getAllQuestions(): Call<QuestionResponseModel>

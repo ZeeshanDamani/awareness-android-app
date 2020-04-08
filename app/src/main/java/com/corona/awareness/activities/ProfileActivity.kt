@@ -51,6 +51,10 @@ class ProfileActivity : BaseActivity() {
         bindingView.btDiagonose.setOnClickListener {
             startActivity(Intent(this, DiagnosisHistoryActivity::class.java))
         }
+
+        bindingView.updatePasswordBtn.setOnClickListener {
+            startActivity(Intent(this, UpdatePasswordActivity::class.java))
+        }
     }
 
     private fun setUpToolBar() {

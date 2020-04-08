@@ -30,7 +30,6 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContentView(R.layout.activity_feeling_sick)
         bindingView = setContentViewDataBinding(R.layout.activity_feeling_sick)
 
         setUpUI()
@@ -39,12 +38,9 @@ class FeelingSickActivity : BaseActivity(), QuestionAnswerAdapter.ViewHolder.ans
     }
 
     fun setUpUI() {
-
         var index: Int = 0
 
         addQuestions()
-
-
 
         bindingView.btNext.setOnClickListener {
             index++

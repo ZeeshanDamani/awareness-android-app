@@ -85,6 +85,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/tEmail" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/update_password_btn"
+                style="@style/DashboardButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:text="Update password"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@+id/bt_edit_profile" />
+
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bt_diagonose"
                 style="@style/DashboardButton"
                 android:layout_width="match_parent"
@@ -92,7 +102,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Diagnosis history"
                 android:textAllCaps="false"
-                app:layout_constraintTop_toBottomOf="@+id/bt_edit_profile" />
+                app:layout_constraintTop_toBottomOf="@+id/update_password_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
