@@ -31,7 +31,7 @@ interface APIInterface {
         @Path("id") userId: String, @Body profileRequest: ProfileRequestModel
     ): Call<LoginResponseModel.User>
 
-        @POST("password/{userId}")
+    @PUT("users/password/{userId}")
     fun updatePassword(@Path("userId") userId: String,
                        @Body passwordUpdaterRequestModel: PasswordUpdaterRequestModel): Call<Void>
 

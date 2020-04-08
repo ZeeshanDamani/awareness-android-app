@@ -1,5 +1,6 @@
 package com.corona.awareness.activities
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import com.corona.awareness.Awareness
 import com.corona.awareness.R
@@ -14,6 +15,7 @@ import retrofit2.Response
 
 class UpdatePasswordActivity : BaseActivity() {
 
+    private var progressDialog: ProgressDialog? = null
     private lateinit var bindingView: ActivityUpdatePasswordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +23,11 @@ class UpdatePasswordActivity : BaseActivity() {
         bindingView = setContentViewDataBinding(R.layout.activity_update_password)
         setUpToolBar()
         setupUI()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        resetProgressDialog()
     }
 
     private fun setUpToolBar() {
@@ -42,11 +49,20 @@ class UpdatePasswordActivity : BaseActivity() {
             val data = getPasswordData()
             val result = validatePasswordData(data)
             if (result == VALID) {
+                progressDialog = ProgressDialog.show(
+                    this, "",
+                    "Please wait", true
+                )
                 updatePassword(data)
             } else {
                 showError(result)
             }
         }
+    }
+
+    private fun resetProgressDialog() {
+        progressDialog?.dismiss()
+        progressDialog = null
     }
 
     private fun updatePassword(data: PasswordData) {
@@ -62,6 +78,7 @@ class UpdatePasswordActivity : BaseActivity() {
 
         call.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                resetProgressDialog()
                 Snackbar.make(
                     bindingView.container,
                     "Failed to update the password",
@@ -70,6 +87,7 @@ class UpdatePasswordActivity : BaseActivity() {
             }
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                resetProgressDialog()
                 Snackbar.make(
                     bindingView.container,
                     "Password updated",
