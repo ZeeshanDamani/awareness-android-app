@@ -38,7 +38,7 @@ interface APIInterface {
     fun sendQuestionAnswers(
         @Path("id") userId: Int,
         @Body postAnswerRequestItem: PostAnswerRequestModel
-    ): Call<PostAnswerResponseModel>
+    ): Call<DiagnosticResult>
 
     @POST("pings/{id}/record")
     fun sendUserPings(

@@ -113,13 +113,21 @@ class DashboardActivity : BaseActivity(), LocationListener,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.profile) {
-            goToProfileActivity()
-            true
-        } else super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.profile -> {
+                goToProfileActivity()
+                true
+            }
+            R.id.logout -> {
+                AppSharedPreferences.remove(Constants.LOGIN_OBJECT)
+                goToLoginActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
-    fun setupUI() {
+    private fun setupUI() {
 
         bindingView.aboutCoronaButton.setOnClickListener {
             goToAboutActivity()
@@ -158,17 +166,17 @@ class DashboardActivity : BaseActivity(), LocationListener,
         startActivity(intent)
     }
 
-    fun goToAboutActivity() {
+    private fun goToAboutActivity() {
         val intent = Intent(this, AboutCoronaActivity::class.java)
         startActivity(intent)
     }
 
-    fun goToGuidelineActivity() {
+    private fun goToGuidelineActivity() {
         val intent = Intent(this, WhoGuidelinesActivity::class.java)
         startActivity(intent)
     }
 
-    fun goToNearestCenterActivity() {
+    private fun goToNearestCenterActivity() {
         val intent = Intent(this, NearestCenterActivity::class.java)
         startActivity(intent)
     }
@@ -217,7 +225,7 @@ class DashboardActivity : BaseActivity(), LocationListener,
                     }
 
                 } else if (response.code() == 401) {
-                    goToLginActivity()
+                    goToLoginActivity()
                 }
             }
         })

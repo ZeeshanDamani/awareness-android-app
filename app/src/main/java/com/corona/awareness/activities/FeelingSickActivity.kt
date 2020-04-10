@@ -12,8 +12,8 @@ import com.corona.awareness.databinding.ActivityFeelingSickBinding
 import com.corona.awareness.model.RecommendationMapper
 import com.corona.awareness.model.StatusMapper
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.DiagnosticResult
 import com.corona.awareness.network.model.PostAnswerRequestModel
-import com.corona.awareness.network.model.PostAnswerResponseModel
 import com.corona.awareness.network.model.QuestionAnswerPair
 import com.corona.awareness.network.model.QuestionResponseModel
 import com.corona.awareness.viewmodel.AnswerModel
@@ -241,8 +241,8 @@ class FeelingSickActivity : BaseActivity() {
                     surveyAnswers
                 )
             )
-        call.enqueue(object : Callback<PostAnswerResponseModel> {
-            override fun onFailure(call: Call<PostAnswerResponseModel>, t: Throwable) {
+        call.enqueue(object : Callback<DiagnosticResult> {
+            override fun onFailure(call: Call<DiagnosticResult>, t: Throwable) {
                 resetProgressDialog()
                 Snackbar.make(
                     bindingView.container,
@@ -252,19 +252,19 @@ class FeelingSickActivity : BaseActivity() {
             }
 
             override fun onResponse(
-                call: Call<PostAnswerResponseModel>,
-                response: Response<PostAnswerResponseModel>
+                call: Call<DiagnosticResult>,
+                response: Response<DiagnosticResult>
             ) {
                 resetProgressDialog()
-                val postAnswerResponse = response.body()!!
+                val survey = response.body()!!
                 bindingView.surveyForm.visibility = View.GONE
                 bindingView.resultGroup.visibility = View.VISIBLE
                 bindingView.resultLayout.apply {
                     assessmentTime.text = SimpleDateFormat("dd MMMM - hh:m a", Locale.ENGLISH)
-                            .format(postAnswerResponse.assessmentTime)
-                    status.text = StatusMapper.map(postAnswerResponse.status)
-                    status.setTextColor(Color.parseColor(StatusMapper.mapColor(postAnswerResponse.status)))
-                    recomendation.text = RecommendationMapper.map(postAnswerResponse.recommendation)
+                            .format(survey.assessmentTime)
+                    status.text = StatusMapper.map(survey.status)
+                    status.setTextColor(Color.parseColor(StatusMapper.mapColor(survey.status)))
+                    recommendation.text = RecommendationMapper.map(survey.recommendation)
                 }
             }
         })

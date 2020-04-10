@@ -21,7 +21,7 @@
         tools:text="30th March - 4:30 PM" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/recomendation"
+        android:id="@+id/recommendation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

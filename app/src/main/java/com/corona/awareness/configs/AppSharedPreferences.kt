@@ -24,6 +24,10 @@ object AppSharedPreferences {
         return GsonBuilder().create().fromJson(value, T::class.java)
     }
 
+    fun remove(key: String) {
+        sharedPreferences.edit()?.remove(key)?.commit()
+    }
+
     inline fun <reified T> get(key: String, type: Type): T? {
         val value = sharedPreferences.getString(key, null)
         return GsonBuilder().create().fromJson(value, type)

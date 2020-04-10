@@ -11,7 +11,7 @@ open class BaseActivity: AppCompatActivity() {
         return DataBindingUtil.setContentView(this, layoutResId)
     }
 
-    fun goToLginActivity() {
+    fun goToLoginActivity() {
         startActivity(Intent(this, LoginActivity::class.java))
         finishAffinity()
     }
