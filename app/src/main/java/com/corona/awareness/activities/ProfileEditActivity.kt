@@ -14,10 +14,11 @@ import com.corona.awareness.activities.ProfileEditActivity.ValidationResult.*
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityProfileEditBinding
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.City
-import com.corona.awareness.model.login.LoginResponseModel
-import com.corona.awareness.model.profile.ProfileRequestModel
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.City
+import com.corona.awareness.network.model.LoginResponseModel
+import com.corona.awareness.network.model.ProfileRequestModel
+import com.corona.awareness.network.model.User
 import com.corona.awareness.setTextIfAny
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.reflect.TypeToken
@@ -220,8 +221,8 @@ class ProfileEditActivity : BaseActivity() {
                 data
             )
 
-        call.enqueue(object : Callback<LoginResponseModel.User> {
-            override fun onFailure(call: Call<LoginResponseModel.User>, t: Throwable) {
+        call.enqueue(object : Callback<User> {
+            override fun onFailure(call: Call<User>, t: Throwable) {
                 resetProgressDialog()
                 Snackbar.make(
                     bindingView.container,
@@ -231,8 +232,8 @@ class ProfileEditActivity : BaseActivity() {
             }
 
             override fun onResponse(
-                call: Call<LoginResponseModel.User>,
-                response: Response<LoginResponseModel.User>
+                call: Call<User>,
+                response: Response<User>
             ) {
                 val userModel = response.body()
                 val loginResponseModel = AppSharedPreferences.get<LoginResponseModel>(Constants.LOGIN_OBJECT)

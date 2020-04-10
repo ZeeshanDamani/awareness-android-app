@@ -6,8 +6,8 @@ import com.corona.awareness.Awareness
 import com.corona.awareness.R
 import com.corona.awareness.activities.UpdatePasswordActivity.ValidationResult.*
 import com.corona.awareness.databinding.ActivityUpdatePasswordBinding
-import com.corona.awareness.model.PasswordUpdaterRequestModel
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.PasswordUpdateRequestModel
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,10 +66,11 @@ class UpdatePasswordActivity : BaseActivity() {
     }
 
     private fun updatePassword(data: PasswordData) {
-        val passwordUpdateRequestModel = PasswordUpdaterRequestModel(
-            data.currentPassword,
-            data.newPassword
-        )
+        val passwordUpdateRequestModel =
+            PasswordUpdateRequestModel(
+                data.currentPassword,
+                data.newPassword
+            )
 
         val call = RetrofitConnection.getAPIClient(Awareness?.loginData?.token!!).updatePassword(
             Awareness.getLoginData()?.user?.id.toString(),

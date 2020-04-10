@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.corona.awareness.R
-import com.corona.awareness.model.questions.get_questions.QuestionResponseModel
+import com.corona.awareness.network.model.Answer
 import kotlinx.android.synthetic.main.answer_item_row.view.*
 
-class QuestionAnswerAdapter(private val answerList: List<QuestionResponseModel.Qustion.Answer> = mutableListOf()
+class QuestionAnswerAdapter(private val answerList: List<Answer> = mutableListOf()
     ,private val answerListener: ViewHolder.answerListener)
     : RecyclerView.Adapter<QuestionAnswerAdapter.ViewHolder>() {
 

@@ -3,7 +3,7 @@ package com.corona.awareness
 import android.app.Application
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.login.LoginResponseModel
+import com.corona.awareness.network.model.LoginResponseModel
 
 class Awareness : Application() {
 

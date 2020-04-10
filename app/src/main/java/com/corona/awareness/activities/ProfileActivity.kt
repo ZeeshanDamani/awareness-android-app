@@ -7,7 +7,7 @@ import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityProfileBinding
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.login.LoginResponseModel
+import com.corona.awareness.network.model.LoginResponseModel
 
 class ProfileActivity : BaseActivity() {
     private lateinit var bindingView: ActivityProfileBinding

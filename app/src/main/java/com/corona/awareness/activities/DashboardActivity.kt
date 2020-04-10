@@ -23,14 +23,15 @@ import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityDashboardBinding
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.login.LoginResponseModel
-import com.corona.awareness.model.record.request.PingRequestModel
-import com.corona.awareness.model.record.response.PingResponseModel
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.LoginResponseModel
+import com.corona.awareness.network.model.PingRequestModel
+import com.corona.awareness.network.model.PingResponseModel
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -129,8 +130,18 @@ class DashboardActivity : BaseActivity(), LocationListener,
         }
 
         bindingView.notFeelWell.setOnClickListener {
-            goToFeelingSickActivity()
-            //getLastLocation()
+            val loginResponseModel: LoginResponseModel? =
+                AppSharedPreferences.get(Constants.LOGIN_OBJECT)
+            val isProfileComplete = loginResponseModel?.user?.profileCompleted ?: false
+            if (isProfileComplete) {
+                goToFeelingSickActivity()
+            } else {
+                Snackbar.make(
+                    bindingView.container,
+                    "Please update your profile",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
 
         bindingView.nearestCenters.setOnClickListener {
@@ -214,7 +225,13 @@ class DashboardActivity : BaseActivity(), LocationListener,
     }
 
     private fun setRecordRequest(latitude: String, longitude: String): PingRequestModel {
-        return PingRequestModel("1584960348", "ANDROID", latitude, longitude, login?.user?.id!!)
+        return PingRequestModel(
+            "1584960348",
+            "ANDROID",
+            latitude,
+            longitude,
+            login?.user?.id!!
+        )
     }
 
 

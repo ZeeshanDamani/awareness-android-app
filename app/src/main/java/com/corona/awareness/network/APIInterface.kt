@@ -1,18 +1,6 @@
 package com.corona.awareness.network
 
-import com.corona.awareness.model.City
-import com.corona.awareness.model.PasswordUpdaterRequestModel
-import com.corona.awareness.model.login.LoginRequestModel
-import com.corona.awareness.model.login.LoginResponseModel
-import com.corona.awareness.model.profile.ProfileRequestModel
-import com.corona.awareness.model.questions.get_questions.QuestionResponseModel
-import com.corona.awareness.model.questions.post_answers.request.PostAnswerRequestModel
-import com.corona.awareness.model.questions.post_answers.response.PostAnswerResponseModel
-import com.corona.awareness.model.record.request.PingRequestModel
-import com.corona.awareness.model.record.response.PingResponseModel
-import com.corona.awareness.model.servay.SurveyResponseModel
-import com.corona.awareness.model.signup.SignUpRequestModel
-import com.corona.awareness.model.signup.SignUpResponseModel
+import com.corona.awareness.network.model.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -29,11 +17,12 @@ interface APIInterface {
     @PUT("users/{id}")
     fun profileEdit(
         @Path("id") userId: String, @Body profileRequest: ProfileRequestModel
-    ): Call<LoginResponseModel.User>
+    ): Call<User>
 
     @PUT("users/password/{userId}")
     fun updatePassword(@Path("userId") userId: String,
-                       @Body passwordUpdaterRequestModel: PasswordUpdaterRequestModel): Call<Void>
+                       @Body passwordUpdaterRequestModel: PasswordUpdateRequestModel
+    ): Call<Void>
 
     @GET("questionnaire/questions")
     fun getAllQuestions(): Call<QuestionResponseModel>
@@ -47,7 +36,7 @@ interface APIInterface {
 
     @POST("questionnaire/response/{id}")
     fun sendQuestionAnswers(
-        @Path("id") userId: String,
+        @Path("id") userId: Int,
         @Body postAnswerRequestItem: PostAnswerRequestModel
     ): Call<PostAnswerResponseModel>
 

@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.helper.kotlin.Constants
-import com.corona.awareness.model.City
-import com.corona.awareness.model.login.LoginResponseModel
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.City
+import com.corona.awareness.network.model.LoginResponseModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

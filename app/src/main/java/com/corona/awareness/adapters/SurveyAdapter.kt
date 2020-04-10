@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.corona.awareness.R
-import com.corona.awareness.model.servay.SurveyResponseModel
+import com.corona.awareness.network.model.UserSurvey
 import kotlinx.android.synthetic.main.servay_item_row.view.*
 
-class SurveyAdapter(private val surveyList: List<SurveyResponseModel.UserSurvey>) :
+class SurveyAdapter(private val surveyList: List<UserSurvey>) :
     RecyclerView.Adapter<SurveyAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -6,8 +6,8 @@ import com.corona.awareness.Awareness
 import com.corona.awareness.R
 import com.corona.awareness.adapters.SurveyAdapter
 import com.corona.awareness.databinding.ActivityDiagnosisHistoryBinding
-import com.corona.awareness.model.servay.SurveyResponseModel
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.SurveyResponseModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

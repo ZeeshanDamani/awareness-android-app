@@ -2,15 +2,13 @@ package com.corona.awareness.activities
 
 import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import com.corona.awareness.R
 import com.corona.awareness.activities.LoginActivity.Companion.SIGN_UP_RESULT_CODE
 import com.corona.awareness.activities.SignUpActivity.ValidationResult.*
-import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivitySignupBinding
-import com.corona.awareness.model.signup.SignUpRequestModel
-import com.corona.awareness.model.signup.SignUpResponseModel
 import com.corona.awareness.network.RetrofitConnection
+import com.corona.awareness.network.model.SignUpRequestModel
+import com.corona.awareness.network.model.SignUpResponseModel
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -113,7 +111,11 @@ class SignUpActivity : BaseActivity() {
     )
 
     private fun SignUpData.toSignUpRequestModel(): SignUpRequestModel {
-        return SignUpRequestModel(phoneNumber, fullName, password)
+        return SignUpRequestModel(
+            phoneNumber,
+            fullName,
+            password
+        )
     }
 
     private enum class ValidationResult {
@@ -147,7 +149,6 @@ class SignUpActivity : BaseActivity() {
             override fun onFailure(call: Call<SignUpResponseModel>, t: Throwable) {
                 resetProgressDialog()
                 onSignUpFailure()
-                Log.e("signupW Error", "" + t.message)
             }
 
             override fun onResponse(
@@ -156,18 +157,10 @@ class SignUpActivity : BaseActivity() {
             ) {
                 resetProgressDialog()
                 if (response.isSuccessful) {
-                    val responseData = response.body()
-
-                    AppSharedPreferences.saveUser(requestModel)
-                    Log.e("qq", "" + responseData?.success)
-                    Log.e("qq", "" + responseData?.responseCode)
-                    Log.e("qq", "" + responseData?.message)
-
                     setResult(SIGN_UP_RESULT_CODE)
                     finish()
                 } else {
                     onSignUpFailure()
-                    Log.e("qq->", "" + response.errorBody())
                 }
             }
         })
