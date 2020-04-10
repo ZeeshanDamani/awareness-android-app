@@ -79,7 +79,7 @@ class DiagnosisHistoryActivity : BaseActivity() {
                 ) {
                     resetProgressDialog()
                     val data = response.body()!!
-                    setUpDiagnoses(data.userDiagnoses.slice(5..data.userDiagnoses.size - 1))
+                    setUpDiagnoses(data.userDiagnoses)
                 }
             })
     }

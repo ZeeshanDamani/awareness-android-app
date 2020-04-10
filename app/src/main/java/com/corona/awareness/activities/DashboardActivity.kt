@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.corona.awareness.Awareness
 import com.corona.awareness.R
@@ -119,8 +120,16 @@ class DashboardActivity : BaseActivity(), LocationListener,
                 true
             }
             R.id.logout -> {
-                AppSharedPreferences.remove(Constants.LOGIN_OBJECT)
-                goToLoginActivity()
+                AlertDialog.Builder(this)
+                    .setTitle("Logout")
+                    .setMessage("Are you sure you want to delete this entry?")
+                    .setPositiveButton(android.R.string.yes) { _, _ ->
+                        AppSharedPreferences.remove(Constants.LOGIN_OBJECT)
+                        goToLoginActivity()
+                    }
+                    .setNegativeButton(android.R.string.no) { dialog, _ -> dialog.dismiss() }
+                    .show()
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
