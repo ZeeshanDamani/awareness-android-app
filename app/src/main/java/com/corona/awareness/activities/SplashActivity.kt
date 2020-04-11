@@ -1,5 +1,6 @@
 package com.corona.awareness.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +10,15 @@ import com.corona.awareness.helper.kotlin.Constants
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.City
 import com.corona.awareness.network.model.LoginResponseModel
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class SplashActivity : AppCompatActivity() {
 
+    var playServiceDialog: Dialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -22,13 +26,28 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val loginResponseModel: LoginResponseModel? =
-            AppSharedPreferences.get(Constants.LOGIN_OBJECT)
-        val user = loginResponseModel?.user
-        if (loginResponseModel?.token.isNullOrBlank() || user == null) {
-            fetchCityInfo()
-        } else
-            goToDashBoard()
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val result = googleApiAvailability.isGooglePlayServicesAvailable(this)
+        if (result == ConnectionResult.SUCCESS) {
+            val loginResponseModel: LoginResponseModel? =
+                AppSharedPreferences.get(Constants.LOGIN_OBJECT)
+            val user = loginResponseModel?.user
+            if (loginResponseModel?.token.isNullOrBlank() || user == null) {
+                fetchCityInfo()
+            } else
+                goToDashBoard()
+        } else {
+            playServiceDialog =
+                googleApiAvailability.getErrorDialog(this, result, REQUEST_PLAY_SERVICE)
+            playServiceDialog?.show()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        playServiceDialog?.let {
+            if (it.isShowing) it.dismiss()
+        }
     }
 
     private fun fetchCityInfo() {
@@ -55,5 +74,9 @@ class SplashActivity : AppCompatActivity() {
         val intent = Intent(this, DashboardActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    companion object {
+        private const val REQUEST_PLAY_SERVICE = 111
     }
 }
