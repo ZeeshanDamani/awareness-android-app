@@ -1,4 +1,4 @@
-package com.corona.awareness.helper.java;
+package com.corona.awareness.helper;
 
 import android.content.Context;
 import android.view.LayoutInflater;

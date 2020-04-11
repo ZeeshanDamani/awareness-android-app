@@ -6,7 +6,7 @@ import android.view.View
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityProfileBinding
-import com.corona.awareness.helper.kotlin.Constants
+import com.corona.awareness.helper.Constants
 import com.corona.awareness.network.model.LoginResponseModel
 
 class ProfileActivity : BaseActivity() {

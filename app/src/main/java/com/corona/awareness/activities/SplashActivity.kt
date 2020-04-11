@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
-import com.corona.awareness.helper.kotlin.Constants
+import com.corona.awareness.helper.Constants
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.City
 import com.corona.awareness.network.model.LoginResponseModel

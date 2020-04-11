@@ -13,7 +13,7 @@ import com.corona.awareness.R
 import com.corona.awareness.activities.ProfileEditActivity.ValidationResult.*
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityProfileEditBinding
-import com.corona.awareness.helper.kotlin.Constants
+import com.corona.awareness.helper.Constants
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.City
 import com.corona.awareness.network.model.LoginResponseModel
@@ -236,7 +236,8 @@ class ProfileEditActivity : BaseActivity() {
                 response: Response<User>
             ) {
                 val userModel = response.body()
-                val loginResponseModel = AppSharedPreferences.get<LoginResponseModel>(Constants.LOGIN_OBJECT)
+                val loginResponseModel = AppSharedPreferences.get<LoginResponseModel>(
+                    Constants.LOGIN_OBJECT)
                 AppSharedPreferences.put(loginResponseModel!!.copy(user = userModel!!), Constants.LOGIN_OBJECT)
                 resetProgressDialog()
                 Snackbar.make(

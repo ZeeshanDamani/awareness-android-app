@@ -6,7 +6,7 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.corona.awareness.R
 import com.corona.awareness.databinding.ActivityNearestCenterBinding
-import com.corona.awareness.helper.java.CustomMarkerInfoWindowView
+import com.corona.awareness.helper.CustomMarkerInfoWindowView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -90,7 +90,8 @@ class NearestCenterActivity : BaseActivity(), OnMapReadyCallback {
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(karachi, 11.2F))
-        var customInfoWindow = CustomMarkerInfoWindowView(this)
+        var customInfoWindow =
+            CustomMarkerInfoWindowView(this)
         mMap.setInfoWindowAdapter(customInfoWindow)
 
         mMap.setOnMarkerClickListener { marker ->

@@ -19,11 +19,10 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import com.corona.awareness.Awareness
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityDashboardBinding
-import com.corona.awareness.helper.kotlin.Constants
+import com.corona.awareness.helper.Constants
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.LoginResponseModel
 import com.corona.awareness.network.model.PingRequestModel
@@ -49,21 +48,15 @@ class DashboardActivity : BaseActivity(), LocationListener,
     private lateinit var mLocationManager: LocationManager
     val PERMISSION_ID = 42
     private lateinit var bindingView: ActivityDashboardBinding
-    lateinit var mFusedLocationClient: FusedLocationProviderClient
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_dashboard)
         setUpToolBar()
         login = AppSharedPreferences.get<LoginResponseModel>(Constants.LOGIN_OBJECT)
-        if (login?.success!!) {
-            Awareness.loginData = login
-            Log.e("qq user -", "" + login?.token)
-            Log.e("qq user?? -", "" + Awareness.loginData!!.token)
-        }
 
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         setupUI()
         enableGPSAutomatically()
@@ -257,7 +250,7 @@ class DashboardActivity : BaseActivity(), LocationListener,
     private fun getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                mFusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
+                fusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
                     var location: Location? = task.result
                     if (location == null) {
                         requestNewLocationData()
@@ -284,8 +277,8 @@ class DashboardActivity : BaseActivity(), LocationListener,
         mLocationRequest.fastestInterval = 0
         mLocationRequest.numUpdates = 1
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        mFusedLocationClient!!.requestLocationUpdates(
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient!!.requestLocationUpdates(
             mLocationRequest, mLocationCallback,
             Looper.myLooper()
         )

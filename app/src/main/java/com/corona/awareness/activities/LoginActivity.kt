@@ -3,11 +3,11 @@ package com.corona.awareness.activities
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import com.corona.awareness.Awareness
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityLoginBinding
-import com.corona.awareness.helper.kotlin.Constants
+import com.corona.awareness.helper.Constants
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.LoginRequestModel
 import com.corona.awareness.network.model.LoginResponseModel
@@ -100,26 +100,16 @@ class LoginActivity : BaseActivity() {
                 resetProgressDialog()
             }
 
-            override fun onResponse(call: Call<LoginResponseModel>, response: Response<LoginResponseModel>) {
+            override fun onResponse(
+                call: Call<LoginResponseModel>,
+                response: Response<LoginResponseModel>
+            ) {
                 resetProgressDialog()
-                if (response.code() == 200) {
-                    if (response.isSuccessful) {
-                        if (response.body() != null) {
-                            val loginResponse = response.body()
-                            if (loginResponse?.success!!) {
-                                AppSharedPreferences.put(loginResponse, Constants.LOGIN_OBJECT)
-                                goToDashboardActivity()
-                                //  Log.e("login", "" + loginResponse?.city?.name)
-                                Log.e("login", "" + loginResponse?.token)
-                            } else {
-                                Log.e("login-Failed", loginResponse.message)
-                            }
-
-                        }
-                    }
-                }
+                val loginResponse = response.body()
+                AppSharedPreferences.put(loginResponse, Constants.LOGIN_OBJECT)
+                Awareness.loginData = loginResponse
+                goToDashboardActivity()
             }
-
         })
 
     }
