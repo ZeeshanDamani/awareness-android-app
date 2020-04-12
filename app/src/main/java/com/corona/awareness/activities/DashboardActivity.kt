@@ -1,90 +1,42 @@
 package com.corona.awareness.activities
 
 
-import android.Manifest
-import android.annotation.SuppressLint
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
-import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityDashboardBinding
 import com.corona.awareness.helper.Constants
-import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.LoginResponseModel
-import com.corona.awareness.network.model.PingRequestModel
-import com.corona.awareness.network.model.PingResponseModel
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Tasks
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
-class DashboardActivity : BaseActivity(), LocationListener,
-    GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener {
+class DashboardActivity : BaseActivity() {
 
-    public var latitude: String? = null
-    public var longitude: String? = null
-    private var login: LoginResponseModel? = null
-    private lateinit var loginData: LoginResponseModel
-    private lateinit var mLocationManager: LocationManager
-    val PERMISSION_ID = 42
     private lateinit var bindingView: ActivityDashboardBinding
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_dashboard)
         setUpToolBar()
-        login = AppSharedPreferences.get<LoginResponseModel>(Constants.LOGIN_OBJECT)
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
         setupUI()
-        enableGPSAutomatically()
-        // getLastLocation()
-
-
-        mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50000, 0F, this)
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
     private fun setUpToolBar() {
@@ -164,8 +116,86 @@ class DashboardActivity : BaseActivity(), LocationListener,
     }
 
     private fun goToFeelingSickActivity() {
+        if (isLocationPermissionsGranted()) {
+            requestCurrentLocationAndStart()
+        } else {
+            requestLocationPermissions()
+        }
+    }
+
+    private fun requestCurrentLocationAndStart() {
+        val task = fusedLocationClient.lastLocation
+            .addOnSuccessListener {
+                if (isLocationEnabled()) {
+                    if (it == null) {
+                        requestNewLocation()
+                    } else {
+                        startFeelingSickActivity(it)
+                    }
+                } else {
+                    Snackbar.make(
+                        bindingView.container,
+                        "Please turn on your location",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+        Thread(Runnable {
+            Tasks.await(task)
+        }).start()
+    }
+
+    private fun startFeelingSickActivity(location: Location) {
         val intent = Intent(this, FeelingSickActivity::class.java)
+        intent.putExtra(FeelingSickActivity.LATITUDE, location.latitude)
+        intent.putExtra(FeelingSickActivity.LONGITUDE, location.longitude)
         startActivity(intent)
+    }
+
+    private fun requestNewLocation() {
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 0
+        locationRequest.fastestInterval = 0
+        locationRequest.numUpdates = 1
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest, locationCallback,
+            Looper.myLooper()
+        )
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val lastLocation: Location = locationResult.lastLocation
+            startFeelingSickActivity(lastLocation)
+        }
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        val locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    private fun isLocationPermissionsGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            applicationContext,
+            ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            applicationContext,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
+            LOCATIONS_PERMISSION_REQUEST_CODE
+        )
     }
 
     private fun goToAboutActivity() {
@@ -183,235 +213,28 @@ class DashboardActivity : BaseActivity(), LocationListener,
         startActivity(intent)
     }
 
-
-    override fun onLocationChanged(location: Location?) {
-        Log.e("lati ", " " + location?.latitude)
-        Log.e("longi ", " " + location?.longitude)
-        Constants.latitude = "" + location?.latitude
-        Constants.longitude = "" + location?.longitude
-        pingUserLocation(location?.latitude.toString(), location?.longitude.toString())
-    }
-
-
-    override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-
-    }
-
-    override fun onProviderEnabled(p0: String?) {
-
-    }
-
-    override fun onProviderDisabled(p0: String?) {
-
-    }
-
-    private fun pingUserLocation(latitude: String, longitude: String) {
-        val call = RetrofitConnection.getAPIClient(login?.token!!)
-            .sendUserPings("" + login?.user?.id, setRecordRequest(latitude, longitude))
-        call.enqueue(object : Callback<PingResponseModel> {
-            override fun onFailure(call: Call<PingResponseModel>, t: Throwable) {
-                Log.e("DSG ", "" + t.message)
-            }
-
-            override fun onResponse(
-                call: Call<PingResponseModel>,
-                response: Response<PingResponseModel>
-            ) {
-                if (response.code() == 200) {
-                    if (response.isSuccessful) {
-                        if (response.body()?.success!!) {
-                            Log.e("success", "" + response.body()?.success)
-                        }
-                    } else {
-                        Log.e("Failed", "" + response.errorBody())
-                    }
-
-                } else if (response.code() == 401) {
-                    goToLoginActivity()
-                }
-            }
-        })
-
-    }
-
-    private fun setRecordRequest(latitude: String, longitude: String): PingRequestModel {
-        return PingRequestModel(
-            "1584960348",
-            "ANDROID",
-            latitude,
-            longitude,
-            login?.user?.id!!
-        )
-    }
-
-
-    //old work
-    @SuppressLint("MissingPermission")
-    private fun getLastLocation() {
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-                fusedLocationClient.lastLocation.addOnCompleteListener(this) { task ->
-                    var location: Location? = task.result
-                    if (location == null) {
-                        requestNewLocationData()
-                    } else {
-                        Log.e("DashboardActivity", "Latitude : " + location.latitude.toString())
-                        Log.e("DashboardActivity", "Longitude : " + location.longitude.toString())
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
-            }
-        } else {
-            requestPermissions()
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun requestNewLocationData() {
-        var mLocationRequest = LocationRequest()
-        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        mLocationRequest.interval = 0
-        mLocationRequest.fastestInterval = 0
-        mLocationRequest.numUpdates = 1
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient!!.requestLocationUpdates(
-            mLocationRequest, mLocationCallback,
-            Looper.myLooper()
-        )
-    }
-
-    private val mLocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            var mLastLocation: Location = locationResult.lastLocation
-//            findViewById<TextView>(R.id.latTextView).text = mLastLocation.latitude.toString()
-//            findViewById<TextView>(R.id.lonTextView).text = mLastLocation.longitude.toString()
-            Log.e("DashboardActivity", "Latitude : " + mLastLocation.latitude.toString())
-            Log.e("DashboardActivity", "Longitude : " + mLastLocation.longitude.toString())
-        }
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        return false
-    }
-
-    private fun requestPermissions() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            ),
-            PERMISSION_ID
-        )
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String>,
+        permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == PERMISSION_ID) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // Granted. Start getting the location information
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATIONS_PERMISSION_REQUEST_CODE && grantResults.isNotEmpty()) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                requestCurrentLocationAndStart()
+            } else {
+                Snackbar.make(
+                    bindingView.container,
+                    "Locations permission required",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }
-    //old work end here
 
-    //Enable GPS
-    private fun enableGPSAutomatically() {
-        var googleApiClient: GoogleApiClient? = null
-        if (googleApiClient == null) {
-            googleApiClient = GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API).addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build()
-            googleApiClient!!.connect()
-            val locationRequest = LocationRequest.create()
-            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            locationRequest.interval = (30 * 1000).toLong()
-            locationRequest.fastestInterval = (5 * 1000).toLong()
-            val builder = LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest)
-            // **************************
-            builder.setAlwaysShow(true) // this is the key ingredient
-            // **************************
-            val result = LocationServices.SettingsApi
-                .checkLocationSettings(googleApiClient, builder.build())
-            result.setResultCallback(object : ResultCallback<LocationSettingsResult> {
-                override fun onResult(result: LocationSettingsResult) {
-                    val status = result.status
-                    val state = result
-                        .locationSettingsStates
-                    when (status.statusCode) {
-                        LocationSettingsStatusCodes.SUCCESS -> {
-                        }
-                        LocationSettingsStatusCodes.RESOLUTION_REQUIRED ->
-                            // Toast.makeText(SplashScreen.this, "Gps is off", Toast.LENGTH_SHORT).show();
-                            // Location settings are not satisfied. But could be
-                            // fixed by showing the user
-                            // a dialog.
-                            try {
-                                // Show the dialog by calling
-                                // startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                status.startResolutionForResult(this@DashboardActivity, 1000)
-                            } catch (e: IntentSender.SendIntentException) {
-                                // Ignore the error.
-                            }
-
-                        LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
-                        }
-                    }
-                    // Toast.makeText(SplashScreen.this, "Success", Toast.LENGTH_SHORT).show();
-                    // All location settings are satisfied. The client can
-                    // initialize location
-                    // requests here.
-                    //   Toast.makeText(SplashScreen.this, "Setting not allowed", Toast.LENGTH_SHORT).show();
-                    // Location settings are not satisfied. However, we have
-                    // no way to fix the
-                    // settings so we won't show the dialog.
-                }
-            })
-        }
+    companion object {
+        private const val LOCATIONS_PERMISSION_REQUEST_CODE = 12
     }
-
-
-    override fun onConnected(p0: Bundle?) {
-
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-
-    }
-
 }
 
 

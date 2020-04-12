@@ -37,13 +37,16 @@ class FeelingSickActivity : BaseActivity() {
     private var maxQuestion = 0
     private var surveyAnswers = mutableListOf<QuestionAnswerPair>()
     private var shouldSubmit: Boolean = false
-
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_feeling_sick)
         setUpToolBar()
         setupUI()
+        latitude = intent.getDoubleExtra(LATITUDE, 0.0)
+        longitude = intent.getDoubleExtra(LONGITUDE, 0.0)
     }
 
     private fun setUpToolBar() {
@@ -236,8 +239,8 @@ class FeelingSickActivity : BaseActivity() {
             .sendQuestionAnswers(
                 Awareness.loginData!!.user.id,
                 PostAnswerRequestModel(
-                    0.0,
-                    0.0,
+                    latitude,
+                    longitude,
                     surveyAnswers
                 )
             )
@@ -261,7 +264,7 @@ class FeelingSickActivity : BaseActivity() {
                 bindingView.resultGroup.visibility = View.VISIBLE
                 bindingView.resultLayout.apply {
                     assessmentTime.text = SimpleDateFormat("dd MMMM - hh:m a", Locale.ENGLISH)
-                            .format(survey.assessmentTime)
+                        .format(survey.assessmentTime)
                     status.text = StatusMapper.map(survey.status)
                     status.setTextColor(Color.parseColor(StatusMapper.mapColor(survey.status)))
                     recommendation.text = RecommendationMapper.map(survey.recommendation)
@@ -295,6 +298,8 @@ class FeelingSickActivity : BaseActivity() {
 
     companion object {
         private const val QUESTION_TYPE_MCQ = "MCQ"
+        const val LATITUDE = "LATITUDE"
+        const val LONGITUDE = "LONGITUDE"
     }
 }
 
