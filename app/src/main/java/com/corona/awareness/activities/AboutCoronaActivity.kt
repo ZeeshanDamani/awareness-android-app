@@ -1,26 +1,30 @@
 package com.corona.awareness.activities
 
 import android.os.Bundle
-import android.view.View
 import com.corona.awareness.R
 import com.corona.awareness.databinding.ActivityAboutCoronaBinding
 
-class AboutCoronaActivity : BaseActivity(),View.OnClickListener {
+class AboutCoronaActivity : BaseActivity() {
 
-    private  var moreInfoCheck: Boolean = false
     private lateinit var bindingView: ActivityAboutCoronaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTitle("About Corona Virus")
         bindingView = setContentViewDataBinding(R.layout.activity_about_corona)
-
+        setUpToolBar()
     }
 
-    override fun onClick(view: View?) {
-
+    private fun setUpToolBar() {
+        setSupportActionBar(bindingView.toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+            it.title = ""
+        }
     }
 
-
-
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }
