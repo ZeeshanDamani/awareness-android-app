@@ -3,8 +3,10 @@ package com.corona.awareness.activities
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -15,6 +17,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.corona.awareness.Awareness
+import com.corona.awareness.LocationPingService
 import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityDashboardBinding
@@ -30,13 +34,44 @@ class DashboardActivity : BaseActivity() {
     private lateinit var bindingView: ActivityDashboardBinding
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val locationPingErrorBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                if (it.action == LOCATION_PING_ERROR) {
+                    val errorType = it.getIntExtra(ERROR_TYPE, -1)
+                    if (errorType == ERROR_TYPE_PERMISSION_MISSING) {
+                        requestLocationPermissions(LOCATIONS_SERVICE_PERMISSION_REQUEST_CODE)
+                    } else if (errorType == ERROR_TYPE_LOCATION_OFF) {
+                        Snackbar.make(
+                            bindingView.container,
+                            "Please turn on your location",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingView = setContentViewDataBinding(R.layout.activity_dashboard)
         setUpToolBar()
         setupUI()
+        Awareness.getLoginData()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(LOCATION_PING_ERROR)
+        registerReceiver(locationPingErrorBroadcastReceiver, intentFilter)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(locationPingErrorBroadcastReceiver)
     }
 
     private fun setUpToolBar() {
@@ -70,6 +105,8 @@ class DashboardActivity : BaseActivity() {
                     .setMessage("Are you sure you want to delete this entry?")
                     .setPositiveButton(android.R.string.yes) { _, _ ->
                         AppSharedPreferences.remove(Constants.LOGIN_OBJECT)
+                        val intent = Intent(this, LocationPingService::class.java)
+                        stopService(intent)
                         goToLoginActivity()
                     }
                     .setNegativeButton(android.R.string.no) { dialog, _ -> dialog.dismiss() }
@@ -186,15 +223,15 @@ class DashboardActivity : BaseActivity() {
         ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
             applicationContext,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun requestLocationPermissions() {
+    private fun requestLocationPermissions(requestCode: Int = LOCATIONS_PERMISSION_REQUEST_CODE) {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-            LOCATIONS_PERMISSION_REQUEST_CODE
+            requestCode
         )
     }
 
@@ -234,6 +271,11 @@ class DashboardActivity : BaseActivity() {
 
     companion object {
         private const val LOCATIONS_PERMISSION_REQUEST_CODE = 12
+        private const val LOCATIONS_SERVICE_PERMISSION_REQUEST_CODE = 13
+        const val LOCATION_PING_ERROR = "LOCATION_PING_ERROR"
+        const val ERROR_TYPE = "ERROR_TYPE"
+        const val ERROR_TYPE_PERMISSION_MISSING = 1
+        const val ERROR_TYPE_LOCATION_OFF = 2
     }
 }
 

@@ -1,21 +1,20 @@
 package com.corona.awareness.activities
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.corona.awareness.Awareness
+import com.corona.awareness.LocationPingService
 import com.corona.awareness.R
 import com.corona.awareness.adapters.QuestionsAdapter
 import com.corona.awareness.databinding.ActivityFeelingSickBinding
 import com.corona.awareness.model.RecommendationMapper
 import com.corona.awareness.model.StatusMapper
 import com.corona.awareness.network.RetrofitConnection
-import com.corona.awareness.network.model.DiagnosticResult
-import com.corona.awareness.network.model.PostAnswerRequestModel
-import com.corona.awareness.network.model.QuestionAnswerPair
-import com.corona.awareness.network.model.QuestionResponseModel
+import com.corona.awareness.network.model.*
 import com.corona.awareness.viewmodel.AnswerModel
 import com.corona.awareness.viewmodel.QuestionViewModel
 import com.corona.awareness.viewmodel.ViewModelType
@@ -268,6 +267,12 @@ class FeelingSickActivity : BaseActivity() {
                     status.text = StatusMapper.map(survey.status)
                     status.setTextColor(Color.parseColor(StatusMapper.mapColor(survey.status)))
                     recommendation.text = RecommendationMapper.map(survey.recommendation)
+                }
+
+                if (survey.status == Status.Critical) {
+                    val intent = Intent(this@FeelingSickActivity, LocationPingService::class.java)
+                    stopService(intent)
+                    startService(intent)
                 }
             }
         })
