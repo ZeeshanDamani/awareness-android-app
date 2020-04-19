@@ -15,8 +15,8 @@
             android:id="@+id/logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_login_logo"
             android:layout_marginBottom="56dp"
+            android:src="@drawable/ic_login_logo"
             app:layout_constraintBottom_toTopOf="@+id/label_phone_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -47,16 +47,26 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Password"
-            app:layout_constraintBottom_toTopOf="@+id/password" />
+            app:layout_constraintBottom_toTopOf="@+id/password_input_layout" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/password"
-            style="@style/FormInput"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/login_btn" />
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/login_btn"
+            app:passwordToggleDrawable="@drawable/visibility_selector"
+            app:passwordToggleEnabled="true">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/password"
+                style="@style/FormInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                app:layout_constraintBottom_toTopOf="@+id/login_btn" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_btn"

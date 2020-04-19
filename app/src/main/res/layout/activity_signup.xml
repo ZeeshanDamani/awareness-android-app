@@ -85,15 +85,27 @@
                     android:text="@string/label_password"
                     app:layout_constraintTop_toBottomOf="@+id/phone_number" />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/password"
-                    style="@style/FormInput"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    app:layout_constraintTop_toBottomOf="@id/label_password" />
+                    android:layout_marginBottom="20dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@id/label_password"
+                    app:passwordToggleDrawable="@drawable/visibility_selector"
+                    app:passwordToggleEnabled="true">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/password"
+                        style="@style/FormInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        app:layout_constraintTop_toBottomOf="@id/label_password" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/label_confirm_password"
@@ -102,17 +114,28 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/label_confirm_password"
-                    app:layout_constraintTop_toBottomOf="@+id/password" />
+                    app:layout_constraintTop_toBottomOf="@+id/password_input_layout" />
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/password_confirmation"
-                    style="@style/FormInput"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/confirm_password_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    app:layout_constraintTop_toBottomOf="@id/label_confirm_password" />
+                    android:layout_marginBottom="20dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@id/label_confirm_password"
+                    app:passwordToggleDrawable="@drawable/visibility_selector"
+                    app:passwordToggleEnabled="true">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/password_confirmation"
+                        style="@style/FormInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        app:layout_constraintTop_toBottomOf="@id/label_confirm_password" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sign_up_btn"
@@ -121,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/label_create_an_account"
-                    app:layout_constraintTop_toBottomOf="@+id/password_confirmation" />
+                    app:layout_constraintTop_toBottomOf="@+id/confirm_password_input_layout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
