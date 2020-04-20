@@ -8,6 +8,7 @@ import com.corona.awareness.R
 import com.corona.awareness.configs.AppSharedPreferences
 import com.corona.awareness.databinding.ActivityLoginBinding
 import com.corona.awareness.helper.Constants
+import com.corona.awareness.helper.PhoneNumberValidator.isValidPhoneNumber
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.LoginRequestModel
 import com.corona.awareness.network.model.LoginResponseModel
@@ -117,7 +118,7 @@ class LoginActivity : BaseActivity() {
 
     private fun validateData(data: LoginRequestModel): ValidationResult {
         return when {
-            data.userPhoneNumber.isBlank() -> ValidationResult.INVALID_PHONE
+            !isValidPhoneNumber(data.userPhoneNumber) -> ValidationResult.INVALID_PHONE
             data.userPassword.isBlank() -> ValidationResult.INVALID_PASSWORD
             else -> ValidationResult.VALID
         }
@@ -133,7 +134,7 @@ class LoginActivity : BaseActivity() {
         resetError()
 
         when (result) {
-            ValidationResult.INVALID_PHONE -> bindingView.userPhone.error = "Enter phone number"
+            ValidationResult.INVALID_PHONE -> bindingView.userPhone.error = "Enter a valid phone number"
             ValidationResult.INVALID_PASSWORD -> bindingView.password.error = "Enter a password"
 
             else -> {

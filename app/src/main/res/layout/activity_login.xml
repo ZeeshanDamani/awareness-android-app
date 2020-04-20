@@ -36,9 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:hint="92XXX..."
             android:inputType="numberDecimal"
-            app:layout_constraintBottom_toTopOf="@+id/label_password"
-            tools:text="923333333333" />
+            android:maxLength="12"
+            app:layout_constraintBottom_toTopOf="@+id/label_password" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/label_password"

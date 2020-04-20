@@ -6,6 +6,7 @@ import com.corona.awareness.R
 import com.corona.awareness.activities.LoginActivity.Companion.SIGN_UP_RESULT_CODE
 import com.corona.awareness.activities.SignUpActivity.ValidationResult.*
 import com.corona.awareness.databinding.ActivitySignupBinding
+import com.corona.awareness.helper.PhoneNumberValidator.isValidPhoneNumber
 import com.corona.awareness.network.RetrofitConnection
 import com.corona.awareness.network.model.SignUpRequestModel
 import com.corona.awareness.network.model.SignUpResponseModel
@@ -74,7 +75,7 @@ class SignUpActivity : BaseActivity() {
 
         when (result) {
             INVALID_NAME -> bindingView.fullName.error = "Enter full name"
-            INVALID_PHONE -> bindingView.phoneNumber.error = "Enter phone number"
+            INVALID_PHONE -> bindingView.phoneNumber.error = "Enter a valid phone number"
             INVALID_PASSWORD -> bindingView.password.error = "Enter a password"
             PASSWORD_MISS_MATCH -> bindingView.passwordConfirmation.error = "Password miss match"
             else -> {}
@@ -92,7 +93,7 @@ class SignUpActivity : BaseActivity() {
     private fun validateData(data: SignUpData): ValidationResult {
         return when {
             data.fullName.isBlank() -> INVALID_NAME
-            data.phoneNumber.isBlank() -> INVALID_PHONE
+            !isValidPhoneNumber(data.phoneNumber) -> INVALID_PHONE
             data.password.isBlank() -> INVALID_PASSWORD
             !matchesPassword(data.password, data.passwordConfirmation) -> PASSWORD_MISS_MATCH
             else -> VALID
